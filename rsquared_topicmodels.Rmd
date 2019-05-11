@@ -137,6 +137,104 @@ d_m <- do.call(rbind, d_m)
 save(d_m, v_m, k_m, lambda_m, file = "simulation_metrics.RData")
 ```
 
+
+
+```{r nih_dtm, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(textmineR)
+
+set.seed(8675309)
+
+nih <- read.csv("data_raw/RePORTER_PRJABS_C_FY2014.csv", stringsAsFactors=FALSE)
+
+s <- sample(seq_len(nrow(nih)), 1000)
+
+nih <- nih$ABSTRACT_TEXT[s]
+
+nih <- stringr::str_conv(nih, "UTF-8")
+
+dtm <- CreateDtm(doc_vec = nih,
+                 doc_names = 1:1000,
+                 ngram_window = c(1, 1),
+                 stopword_vec = stopwords::stopwords("en"),
+                 verbose = FALSE)
+
+tf <- TermDocFreq(dtm)
+
+dtm <- dtm[, tf$term[tf$term_freq > 2]]
+
+save(dtm, file = "nih_sample_dtm.RData")
+
+```
+
+
+```{r train_nih_models, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+
+k_list <- seq(from = 50, to=500, by=50)
+
+nih_out <- parallel::mclapply(k_list, function(k){
+  
+  m <- FitLdaModel(dtm = dtm, k = k,
+                   iterations = 300,
+                   burnin = 250,
+                   alpha = 0.1,
+                   beta = 0.01, 
+                   optimize_alpha = FALSE,
+                   calc_likelihood = FALSE,
+                   calc_coherence = FALSE,
+                   calc_r2 = TRUE)
+  
+  m$ll <- CalcLikelihood(dtm = dtm, phi = m$phi, theta = m$theta)
+  
+  data.frame(r2 = m$r2, ll = m$ll, stringsAsFactors = FALSE)
+}, mc.cores = 4)
+
+nih_out <- do.call(rbind, nih_out)
+
+save(nih_out, file = "nih_out.RData")
+
+```
+
+```{r sim_dtm, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(textmineR)
+
+sim_dtm <- SampleDocs(phi = par$d_1000$phi,
+                      theta = par$d_1000$theta, 
+                      lambda = lambda)
+
+save(sim_dtm, file = "sim_dtm.RData")
+```
+
+
+```{r train_sim_models, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+
+set.seed(8675309)
+
+k_list <- seq(from = 35, to=70, by=5)
+
+sim_out <- parallel::mclapply(k_list, function(k){
+  
+  m <- FitLdaModel(dtm = dtm, k = k,
+                   iterations = 300,
+                   burnin = 250,
+                   alpha = 0.1,
+                   beta = 0.01, 
+                   optimize_alpha = FALSE,
+                   calc_likelihood = FALSE,
+                   calc_coherence = FALSE,
+                   calc_r2 = TRUE)
+  
+  m$ll <- CalcLikelihood(dtm = dtm, phi = m$phi, theta = m$theta)
+  
+  data.frame(r2 = m$r2, ll = m$ll, stringsAsFactors = FALSE)
+}, mc.cores = 4)
+
+sim_out <- do.call(rbind, sim_out)
+
+save(sim_out, file = "sim_out.RData")
+
+
+```
+
 # Introduction
 <!-- no \IEEEPARstart -->
 
@@ -356,9 +454,84 @@ $R^2$ increases with the \textit{estimated} number of topics using LDA. This ind
 
 The same likelihood calculation is used here, as described above. This likelihood calculation excludes prior information typically used when calculating the likelihood of an LDA model. This is perhaps not the optimal method for calculating likelihoods when using a Bayesian model. However, this prior information is excluded here for two reasons. First, it is consistent with the method used for calculating McFadden's $R^2$ earlier in the paper. Second, this log likelihood can be calculated exactly. LDA's likelihood is contained within an intractable integral. Various approximations have been developed. However, there is some risk that a comparison of an approximated likelihood to $R^2$ may be biased by the approximation method. 
 
+
+```{r sim_figure}
+
+par(mar = c(5,4,4,4) + 0.3)
+
+plot(seq(from = 35, to=70, by=5),
+     sim_out$r2, 
+     type = "o", 
+     lwd = 3,
+     pch = 19,
+     col = rgb(1,0,0,0.5),
+     ylab = "R-squared",
+     xlab = "Number of topics",
+     main = "Simulated Corpus")
+
+par(new = TRUE)
+
+plot(seq(from = 35, to=70, by=5),
+     sim_out$ll, 
+     type = "o", 
+     lwd = 3,
+     col = rgb(0,0,1,0.5),
+     lty = 2,
+     pch = 17,
+     ylab = "",
+     xlab = "",
+     yaxt = "n",
+     xaxt = "n",
+     main = "")
+
+legend("bottomright", 
+       legend=c("R-squared", "Log Likelihood"), 
+       lty=c(1,2), 
+       lwd=3, pch=c(19,17), col=c(rgb(1,0,0,0.5), rgb(0,0,1,0.5)))
+
+axis(side=4, at = pretty(range(sim_out$ll)))
+mtext("Log Likelihood", side=4, line=3)
+
+```
+
+
+
 ```{r nih_figure}
 
+par(mar = c(5,4,4,4) + 0.3)
 
+plot(seq(from = 50, to=500, by=50),
+     nih_out$r2, 
+     type = "o", 
+     lwd = 3,
+     pch = 19,
+     col = rgb(1,0,0,0.5),
+     ylab = "R-squared",
+     xlab = "Number of topics",
+     main = "NIH Corpus")
+
+par(new = TRUE)
+
+plot(seq(from = 50, to=500, by=50),
+     nih_out$ll, 
+     type = "o", 
+     lwd = 3,
+     col = rgb(0,0,1,0.5),
+     lty = 2,
+     pch = 17,
+     yaxt = "n",
+     xaxt = "n",
+     ylab = "",
+     xlab = "",
+     main = "")
+
+legend("bottomright", 
+       legend=c("R-squared", "Log Likelihood"), 
+       lty=c(1,2), 
+       lwd=3, pch=c(19,17), col=c(rgb(1,0,0,0.5), rgb(0,0,1,0.5)))
+
+axis(side=4, at = pretty(range(nih_out$ll)))
+mtext("Log Likelihood", side=4, line=3)
 
 ```
 
