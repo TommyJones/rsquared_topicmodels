@@ -42,6 +42,100 @@ knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
 options(tinytex.verbose = TRUE)
 ```
 
+```{r simulations}
+source("simulate_functions.R")
+
+library(textmineR)
+
+set.seed(8675309)
+
+### Default parameters ----
+K <- 50
+D <- 2000
+V <- 5000
+lambda <- 500
+
+
+### Vary K ----
+# lists of parameters to vary
+k_list <- c(20, 50, 100, 200)
+names(k_list) <- paste("k", k_list, sep="_")
+
+
+par <- parallel::mclapply(k_list, 
+                          function(k) SimulatePar(D = D, V = V, K = k),
+                          mc.cores = 4)
+
+k_m <- lapply(par, function(p){
+  
+  d <- SampleDocs(phi = p$phi, theta = p$theta, lambda = lambda)
+  
+  m <- MetricFun(phi = p$phi, theta = p$theta, dtm = d)
+  
+  m
+})
+
+k_m <- do.call(rbind, k_m)
+
+### Vary Lambda ----
+lambda_list <- c(50, 100, 250, 500, 1000)
+names(lambda_list) <- paste("l", lambda_list, sep="_")
+
+par <- par[[2]] # represents baseline parameters, above
+
+lambda_m <- lapply(lambda_list, function(l){
+  d <- SampleDocs(phi = par$phi, theta = par$theta, lambda = l, cpus = 4)
+  
+  m <- MetricFun(phi = par$phi, theta = par$theta, dtm = d)
+  
+  m
+})
+
+lambda_m <- do.call(rbind, lambda_m)
+
+
+### Vary V ----
+v_list <- c(2000, 5000, 10000, 25000)
+names(v_list) <- paste("v", v_list, sep="_")
+
+par <- parallel::mclapply(v_list, 
+                          function(v) SimulatePar(D = D, V = v, K = K),
+                          mc.cores = 4)
+
+v_m <- lapply(par, function(p){
+  
+  d <- SampleDocs(phi = p$phi, theta = p$theta, lambda = lambda)
+  
+  m <- MetricFun(phi = p$phi, theta = p$theta, dtm = d)
+  
+  m
+})
+
+v_m <- do.call(rbind, v_m)
+
+
+
+### Vary D ----
+d_list <- c(1000, 2000, 5000, 10000)
+names(d_list) <- paste("d", d_list, sep="_")
+
+par <- parallel::mclapply(d_list, 
+                          function(d) SimulatePar(D = d, V = V, K = K),
+                          mc.cores = 4)
+
+d_m <- lapply(par, function(p){
+  
+  d <- SampleDocs(phi = p$phi, theta = p$theta, lambda = lambda)
+  
+  m <- MetricFun(phi = p$phi, theta = p$theta, dtm = d)
+  
+  m
+})
+
+d_m <- do.call(rbind, d_m)
+
+save(d_m, v_m, k_m, lambda_m, file = "simulation_metrics.RData")
+```
 
 # Introduction
 <!-- no \IEEEPARstart -->
@@ -52,9 +146,9 @@ According to an often-quoted but never cited definition, "the goodness of fit of
 
 [^1]: This quote appears verbatim on Wikipedia and countless books, papers, and websites.
 
-Of course, goodness of fit is only one concern in statistical modeling. Researchers may trade some goodness of fit for ease of interpretation. For example, many accurate and robust predictive models are non-parametric "black boxes", making inference difficult. Researchers may trade off some goodness of fit for interpretability by selecting a more restrictive parametric model. If the emphasis is on prediction, researchers may trade some in-sample fit for predictive robustness. This is cited as one motivation for using the Bayesian latent Dirichlet allocation (LDA) topic model over the frequentist probabilistic latent semantic analysis (pLSA). It is alleged that pLSA tends to over fit its training sample, making its estimates fragile to the introduction of new data. @blei2003latent Under certain conditions, pLSA and LDA are equivalent models, however. @girolami2003equivalence
+Of course, goodness of fit is only one concern in statistical modeling. Researchers may trade some goodness of fit for ease of interpretation. For example, many accurate and robust predictive models are non-parametric "black boxes", making inference difficult. Researchers may trade off some goodness of fit for interpretability by selecting a more restrictive parametric model. If the emphasis is on prediction, researchers may trade some in-sample fit for predictive robustness. This is cited as one motivation for using the Bayesian latent Dirichlet allocation (LDA) topic model over the frequentist probabilistic latent semantic analysis (pLSA). It is alleged that pLSA tends to over fit its training sample, making its estimates fragile to the introduction of new data. [@blei2003latent] Under certain conditions, pLSA and LDA are equivalent models, however. [@girolami2003equivalence]
 
-Goodness of fit manifests itself in topic modeling through word frequencies. It is a common misconception that topic models are fully-unsupervised methods. If true, this would mean that no outcomes exist upon which to compare a model’s fitted values. However, topic models are ultimately generative models of word frequencies. The expected value of a document under a topic model are given by the expected value of a multinomial random variable. The outcomes, then, are the word frequencies themselves. Most goodness of fit measures in topic modeling are restricted to in-sample fit. However, some out-of-sample measures have been developed. @buntine2009estimating
+Goodness of fit manifests itself in topic modeling through word frequencies. It is a common misconception that topic models are fully-unsupervised methods. If true, this would mean that no outcomes exist upon which to compare a model’s fitted values. However, topic models are ultimately generative models of word frequencies. The expected value of a document under a topic model are given by the expected value of a multinomial random variable. The outcomes, then, are the word frequencies themselves. Most goodness of fit measures in topic modeling are restricted to in-sample fit. However, some out-of-sample measures have been developed. [@buntine2009estimating]
 
 # Probabilistic Topic Models
 Probabilistic topic models are a family of stochastic models for estimating abstract "topics" in a set of documents. Many methods have been developed to provide a flexible family of topic models. Some include frequently available metadata about documents, such as the time of the publication [CITE DYNAMIC TOPIC MODELS], or the author and location of the publication [CITE]. Most probabilistic topic models are Bayesian, though probabilistic latent semantic analysis (pLSA) is frequentist. [CITE] Without loss of generality, all probabilistic topic models model the document-generating process as a mixture of multinomial distributions.[^2] Probabilistic topic models estimate parameters of an idealized stochastic process for how words get on the page. Instead of writing full, syntatictically-coherent, sentences, the author samples a topic from a multinomial distribution and then given the topic samples a word. The process for a single draw of the $n$-th word for the $d$-th document, $w_{d,n}$, is  
@@ -278,6 +372,61 @@ The standard (geometric) interpretation of $R^2$ is preferred to McFadden's pseu
 A result of this paper indicates that further study is needed on the relationship between document length, the number of documents in a corpus, and vocabulary size. Results reported in this paper demonstrate that document length is a considerable factor in model fit, whereas the number of documents (above 1,000) is not. If robust, this result indicates that the topic modeling community may need to change focus away from scaling estimation algorithms for large corpora. Instead, more effort should be put towards obtaining high-quality data. Also, studying the relationship between these parameters, along with the number of topics, may facilitate the development of an adjusted $R^2$, guarding against model over fit.
 
 Lack of consistent evaluation metrics has limited the use of topic models as a mature statistical method. The development of an $R^2$ for topic modeling is no silver bullet. However it represents a step towards establishing consistency and rigour in topic modeling. This paper proposes reporting $R^2$ as a standard metric alongside topic models, as is typically done with OLS.
+
+```{r k_plot, fig.cap = "Varying the number of topics on a simulated corpus"}
+
+plot(k_m[, c("K", "r2")], type = "o", lwd = 3, col = "red",
+     main = "",
+     xlab = "Number of topics", ylab = "R-squared",
+     ylim = c(0,1))
+
+lines(k_m[, c("K", "r2_mac")], type = "o", lty = 2, lwd = 3, col = "blue")
+
+legend("topright", legend = c("Standard", "McFadden's"),
+       lwd = 3, lty = c(1,2), col = c("red", "blue"))
+
+```
+
+```{r l_plot, fig.cap = "Varying average document length on a simulated corpus"}
+plot(lambda_m[, c("len", "r2")], type = "o", lwd = 3, col = "red",
+     main = "",
+     xlab = "Average document length", ylab = "R-squared",
+     ylim = c(0,1))
+
+lines(lambda_m[, c("len", "r2_mac")], type = "o", lty = 2, lwd = 3, col = "blue")
+
+legend("topright", legend = c("Standard", "McFadden's"),
+       lwd = 3, lty = c(1,2), col = c("red", "blue"))
+
+```
+
+```{r v_plot, fig.cap = "Varying vocabulary size on a simulated corpus"}
+plot(v_m[, c("V", "r2")], type = "o", lwd = 3, col = "red",
+     main = "",
+     xlab = "Number of unique tokens", ylab = "R-squared",
+     ylim = c(0,1))
+
+lines(v_m[, c("V", "r2_mac")], type = "o", lty = 2, lwd = 3, col = "blue")
+
+legend("topright", legend = c("Standard", "McFadden's"),
+       lwd = 3, lty = c(1,2), col = c("red", "blue"))
+
+```
+
+
+
+```{r d_plot, fig.cap = "Varying number of documents on a simulated corpus"}
+plot(d_m[, c("D", "r2")], type = "o", lwd = 3, col = "red",
+     main = "",
+     xlab = "Number of documents", ylab = "R-squared",
+     ylim = c(0,1))
+
+lines(d_m[, c("D", "r2_mac")], type = "o", lty = 2, lwd = 3, col = "blue")
+
+legend("topright", legend = c("Standard", "McFadden's"),
+       lwd = 3, lty = c(1,2), col = c("red", "blue"))
+
+```
 
 Acknowledgment {#acknowledgment}
 ==============

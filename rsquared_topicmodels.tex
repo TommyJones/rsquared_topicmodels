@@ -497,7 +497,7 @@ is cited as one motivation for using the Bayesian latent Dirichlet
 allocation (LDA) topic model over the frequentist probabilistic latent
 semantic analysis (pLSA). It is alleged that pLSA tends to over fit its
 training sample, making its estimates fragile to the introduction of new
-data. Blei, Ng, and Jordan (2003) Under certain conditions, pLSA and LDA
+data. (Blei, Ng, and Jordan 2003) Under certain conditions, pLSA and LDA
 are equivalent models, however. Girolami and Kabán (2003)
 
 Goodness of fit manifests itself in topic modeling through word
@@ -1034,6 +1034,30 @@ topic modeling is no silver bullet. However it represents a step towards
 establishing consistency and rigour in topic modeling. This paper
 proposes reporting \(R^2\) as a standard metric alongside topic models,
 as is typically done with OLS.
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/k_plot-1.pdf}
+\caption{Varying the number of topics on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/l_plot-1.pdf}
+\caption{Varying average document length on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/v_plot-1.pdf}
+\caption{Varying vocabulary size on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/d_plot-1.pdf}
+\caption{Varying number of documents on a simulated corpus}
+\end{figure}
 
 \hypertarget{acknowledgment}{%
 \section{Acknowledgment}\label{acknowledgment}}
