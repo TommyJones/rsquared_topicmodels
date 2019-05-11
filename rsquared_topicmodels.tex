@@ -498,7 +498,7 @@ allocation (LDA) topic model over the frequentist probabilistic latent
 semantic analysis (pLSA). It is alleged that pLSA tends to over fit its
 training sample, making its estimates fragile to the introduction of new
 data. (Blei, Ng, and Jordan 2003) Under certain conditions, pLSA and LDA
-are equivalent models, however. Girolami and Kabán (2003)
+are equivalent models, however. (Girolami and Kabán 2003)
 
 Goodness of fit manifests itself in topic modeling through word
 frequencies. It is a common misconception that topic models are
@@ -509,7 +509,7 @@ expected value of a document under a topic model are given by the
 expected value of a multinomial random variable. The outcomes, then, are
 the word frequencies themselves. Most goodness of fit measures in topic
 modeling are restricted to in-sample fit. However, some out-of-sample
-measures have been developed. Buntine (2009)
+measures have been developed. (Buntine 2009)
 
 \hypertarget{probabilistic-topic-models}{%
 \section{Probabilistic Topic Models}\label{probabilistic-topic-models}}
@@ -573,27 +573,28 @@ obtained from probabilistic topic models. Likelihoods may contain prior
 information, as is often the case with Bayesian models. If prior
 information is unknown or undesired, researchers may calculate the
 likelihood using only estimated parameters. Researchers have used
-likelihoods to select the number of topics{[}CITE{]}, compare
-priors{[}CITE{]}, or otherwise evaluate the efficacy of different
-modeling procedures. {[}CITE{]} {[}CITE{]} A popular likelihood method
-for evaluating out-of-sample fit is called perplexity. Perplexity
-measures a transformation of the likelihood of the held-out words
-conditional on the trained model.
+likelihoods to select the number of topics(Griffiths and Steyvers 2004),
+compare priors(Wallach, Mimno, and McCallum 2009), or otherwise evaluate
+the efficacy of different modeling procedures. (Asuncion et al. 2009)
+(Nguyen, Boyd-Graber, and Resnik 2014) A popular likelihood method for
+evaluating out-of-sample fit is called perplexity. Perplexity measures a
+transformation of the likelihood of the held-out words conditional on
+the trained model.
 
 Non-likelihood measures are less-commonly used. Some of these methods
 bridge the gap between interpretation and goodness of fit. One such
-method is the intruder test.{[}CITE{]} The intruder test uses human
-judgment. Judges are shown a few high-probability words in a topic, with
-one low-probability word mixed in. Judges must find the low-probability
-word, the intruder. They then repeat the procedure with documents
-instead of words. A good topic model should allow judges to easily
-detect the intruders. Coherence is a measure attempting to approximate
-the results of intruder tests in an automated fashion. {[}CITE{]} The
-coherence of a topic is a sum of log ratios of word co-occurance across
-documents. Researchers have used precision and recall methods such as
-the area under a ROC curve (AUC) on topically-tagged corpora.{[}CITE{]}
-The most prevalent topic in each document is taken as a document's
-topical classification.
+method is the intruder test.(Chang et al. 2009) The intruder test uses
+human judgment. Judges are shown a few high-probability words in a
+topic, with one low-probability word mixed in. Judges must find the
+low-probability word, the intruder. They then repeat the procedure with
+documents instead of words. A good topic model should allow judges to
+easily detect the intruders. Coherence is a measure attempting to
+approximate the results of intruder tests in an automated fashion.
+(Mimno et al. 2011) The coherence of a topic is a sum of log ratios of
+word co-occurance across documents. Researchers have used precision and
+recall methods such as the area under a ROC curve (AUC) on
+topically-tagged corpora.(Asuncion et al. 2009) The most prevalent topic
+in each document is taken as a document's topical classification.
 
 Though useful, current evaluation metrics in topic modeling are
 difficult to interpret, are inappropriate for use in topic modeling, or
@@ -614,16 +615,17 @@ corpus influence the scale of the likelihood function. Adding more
 documents, having a larger vocabulary, and even having longer documents
 all reduce the likelihood. Likelihoods of multiple models on the same
 corpus can be compared. (Researchers often do this to help select the
-number of topics for a final model.){[}CITE{]} Topic models on different
-corpora cannot be compared, however. One corpus may have 1,000 documents
-and 5,000 tokens, while another may have 10,000 documents and 25,000
-tokens. The likelihood of a model on the latter corpus will be much
-smaller than a model on the former. Yet this does not indicate the model
-on the latter corpus is a worse fit; the likeli- hood function is simply
-on a different scale. Perplexity is a transformation of the likelihood
-for out-of-sample documents. The transformation makes perplexity
-less-intuitively interpreted than a raw likelihood. Perplexity's scale
-is influenced by the same factors as the likelihood.
+number of topics for a final model.)(Griffiths and Steyvers 2004) Topic
+models on different corpora cannot be compared, however. One corpus may
+have 1,000 documents and 5,000 tokens, while another may have 10,000
+documents and 25,000 tokens. The likelihood of a model on the latter
+corpus will be much smaller than a model on the former. Yet this does
+not indicate the model on the latter corpus is a worse fit; the
+likelihood function is simply on a different scale. Perplexity is a
+transformation of the likelihood for out-of-sample documents. The
+transformation makes perplexity less-intuitively interpreted than a raw
+likelihood. Perplexity's scale is influenced by the same factors as the
+likelihood.
 
 \hypertarget{the-coefficient-of-determination-r2}{%
 \section{\texorpdfstring{The Coefficient of Determination:
@@ -640,26 +642,27 @@ interpreted---without loss of generality---as the proportion of
 \emph{variability} in the data that is explained by the model. For
 linear models with outcomes in \(\mathbb{R}_1\), \(R^2\) is bound
 between 0 and 1 and is the proportion of \emph{variance} in the data
-explained by the model.{[}CITE{]} Even outside of the context of a
-linear model, \(R^2\) retains its maximum of 1 and its interpretation as
-the proportion of explained variability. Negative values of \(R^2\) are
-possible for non-linear models or models in \(\mathbb{R}_m\) where
-\(m > 1\). These negative values indicate that simply guessing the mean
-outcome is a better fit than the model.\footnote{In this author's
-  experience, negative values indicate an error in one's code, rather
-  than simply due to an exceptionally poor fitting model.}
+explained by the model.(Neter et al. 1996) Even outside of the context
+of a linear model, \(R^2\) retains its maximum of 1 and its
+interpretation as the proportion of explained variability. Negative
+values of \(R^2\) are possible for non-linear models or models in
+\(\mathbb{R}_M\) where \(M > 1\). These negative values indicate that
+simply guessing the mean outcome is a better fit than the
+model.\footnote{In this author's experience, negative values indicate an
+  error in one's code, rather than simply due to an exceptionally poor
+  fitting model.}
 
 \hypertarget{the-standard-definition-of-r2}{%
 \subsection{\texorpdfstring{The Standard Definition of
 \(R^2\)}{The Standard Definition of R\^{}2}}\label{the-standard-definition-of-r2}}
 
-For a model, \(f\), of outcome variable, \(y\), where there are \(n\)
+For a model, \(f\), of outcome variable, \(y\), where there are \(N\)
 observations, \(R^2\) is derived from the following:
 
 \begin{align}
-  \bar{y} &= \frac{1}{n}\sum_{i=1}^{n}y_i\\
-  SS_{tot.} &= \sum_{i=1}^n{(y_i-\bar{y})^2}\\
-  SS_{resid.} &= \sum_{i=1}^n{(f_i-y_i)^2}
+  \bar{y} &= \frac{1}{N}\sum_{i=1}^{N}y_i\\
+  SS_{tot.} &= \sum_{i=1}^N{(y_i-\bar{y})^2}\\
+  SS_{resid.} &= \sum_{i=1}^N{(f_i-y_i)^2}
 \end{align}
 
 Thus, the standard definition of \(R^2\) is a ratio of summed squared
@@ -678,10 +681,10 @@ total squared-euclidean distance from each \(y_i\) to the mean outcome,
 \(\bar{y}\). Then \(SS_{resid.}\) is the total squared-euclidean
 distance from each \(y_i\) to its predicted value under the model,
 \(f_i\). Recall that for any two points
-\(\mathbf{p}, \mathbf{q} \in \mathbb{R}_m\)
+\(\mathbf{p}, \mathbf{q} \in \mathbb{R}_M\)
 
 \begin{align}
-    d(\mathbf{p},\mathbf{q}) = \sqrt{\sum_{j=1}^m{(p_j - q_j)^2}}
+    d(\mathbf{p},\mathbf{q}) = \sqrt{\sum_{i=1}^M{(p_i - q_i)^2}}
 \end{align}
 
 where \(d(\mathbf{p}, \mathbf{q})\) denotes the euclidean distance
@@ -689,36 +692,38 @@ between \(\mathbf{p}\) and \(\mathbf{q}\). \(R^2\) is often taught in
 the context of OLS where \(y_i, f_i \in \mathbb{R}_1\). In that case,
 \(d(y_i, f_i) = \sqrt{(y_i - f_i)^2}\); by extension
 \(d(y_i, \bar{y}) = \sqrt{(y_i - \bar{y})^2}\). In the multidimensional
-case where \(\mathbf{y}_i, \mathbf{f}_i \in \mathbb{R}_m; m > 1\), then
-\(\bar{\mathbf{y}} \in \mathbb{R}_m\) represents the point at the center
-of \(\mathbf{y}\) in \(\mathbb{R}_m\).\footnote{In the one-dimensional
-  case, where \(y_i , f_i \in \mathbb{R}_1\), \(SS_{resid.}\) can be
+case where \(\mathbf{y}_i, \mathbf{f}_i \in \mathbb{R}_M; M > 1\), then
+\(\bar{\mathbf{y}} \in \mathbb{R}_M\) represents the point at the center
+of the data in \(\mathbb{R}_M\).\footnote{In the one-dimensional case,
+  where \(y_i , f_i \in \mathbb{R}_1\), \(SS_{resid.}\) can be
   considered the squared-euclidean distance between the
   \(n\)-dimensional vectors \(y\) and \(f\). However, this relationship
   does not hold when
-  \(\mathbf{y}_i , \mathbf{f}_i \in \mathbb{R}_m ; m > 1\).}
+  \(\mathbf{y}_i , \mathbf{f}_i \in \mathbb{R}_M ; M > 1\).}
 
-We can rewrite \(R^2\) using the relationships above.
+We can rewrite \(R^2\) using the relationships above. Note than now
+\(\bar{\mathbf{y}}\) is now a vector with \(M\) entries. The \(j\)-th
+entry of \(\bar{\mathbf{y}}\) is averaged across all \(N\) vectors. i.e
+\(\bar{y}_j = \frac{1}{N} \sum_{i=1}^{N} y_{i,v}\). From there we have:
 
 \begin{align}
-    \bar{\mathbf{y}}_v &= \frac{1}{n} \sum_{i=1}^{n} y_{i,v} 
-      \text{, the $v$-th entry of the vector $\bar{\mathbf{y}}$} \\ 
-    SS_{tot.} &= \sum_{i=1}^n{d(\mathbf{y}_i, \bar{\mathbf{y}}})^2\\
-    SS_{resid.} &= \sum_{i=1}^n{d(\mathbf{y}_i, \mathbf{f}_i)^2}\\
-    \Rightarrow R^2 &= 1 - \frac{\sum_{i=1}^n{d(y_i, f_i)^2}}{\sum_{i=1}^n{d(y_i, \bar{y})^2}}
+    \bar{\mathbf{y}} &= \frac{1}{N} \sum_{i=1}^{N} \mathbf{y}_i \\ 
+    SS_{tot.} &= \sum_{i=1}^N{d(\mathbf{y}_i, \bar{\mathbf{y}}})^2\\
+    SS_{resid.} &= \sum_{i=1}^N{d(\mathbf{y}_i, \mathbf{f}_i)^2}\\
+    \Rightarrow R^2 & \equiv 1 - \frac{SS_{resid.}}{SS_{tot.}}
 \end{align}
 
-Figure {[}REFERENCE FIGURE{]} visualizes the geometric interpretation of
-\(R^2\) for outcomes in \(\mathbb{R}_2\). The left image represents
-\(SS_{tot.}\): the red dots are data points(\(y_i\)); the black dot is
-the mean (\(\bar{y}\)); the line segments represent the euclidean
-distance from each \(y_i\) to \(\bar{y}\). \(SS_{tot.}\) is obtained by
-squaring the length of each line segment and then adding them together.
-The right image represents \(SS_{resid.}\): the blue dots are the fitted
-values under the model (\(f_i\)); the line segments represent the
-euclidean distance from each \(f_i\) to its corresponding \(y_i\).
-\(SS_{resid.}\) is obtained by squaring the length of each line segment
-and then adding them together.
+Fig. 1 visualizes the geometric interpretation of \(R^2\) for outcomes
+in \(\mathbb{R}_2\). The left image represents \(SS_{tot.}\): the red
+dots are data points(\(y_i\)); the black dot is the mean (\(\bar{y}\));
+the line segments represent the euclidean distance from each \(y_i\) to
+\(\bar{y}\). \(SS_{tot.}\) is obtained by squaring the length of each
+line segment and then adding the squared segments together. The right
+image represents \(SS_{resid.}\): the blue dots are the fitted values
+under the model (\(f_i\)); the line segments represent the euclidean
+distance from each \(f_i\) to its corresponding \(y_i\). \(SS_{resid.}\)
+is obtained by squaring the length of each line segment and then adding
+the squared segments together.
 
 \begin{figure}
 \centering
@@ -742,19 +747,20 @@ guessing \(\bar{y}\) is better than using the model.
 Models}{Extending R\^{}2 to Topic Models}}\label{extending-r2-to-topic-models}}
 
 An \(R^2\) for topic models follows from the geometric interpretation of
-\(R^2\). For a document, \(d\), the observed value, \(y_d\), is a vector
-of integers counting the number of times each token appears in \(N_d\)
-draws. The document's fitted value under the model follows that \(y_d\)
-represents the outcome of a multinomial random variable. The fitted
-value is \(f_d = N_d \cdot \theta_d \cdot \Phi^T\). The center of the
-documents in the corpus, \(\bar{y}\), is obtained by averaging the
-occurrence of each token across all documents. From this we obtain
-\(R^2\).
+\(R^2\). For a document, \(d\), the observed value, \(\mathbf{y}_d\), is
+a vector of integers counting the number of times each token appears in
+\(n_d\) draws. The document's fitted value under the model follows that
+\(y_d\) represents the outcome of a multinomial random variable. The
+fitted value is
+\(\mathbf{f}_d = \mathbf{n} \odot \boldsymbol\theta_d \cdot \boldsymbol\Phi^T\).
+The center of the documents in the corpus, \(\bar{\mathbf{y}}\), is
+obtained by averaging the occurrence of each token across all documents.
+From this we obtain \(R^2\).
 
 \begin{align}
-    \bar{y}_v &= \frac{1}{D}\sum_{d=1}^{D}y_{d,v}\\
-    SS_{tot.} &= \sum_{d=1}^D{d(y_d, \bar{y})^2}\\
-    SS_{resid.} &= \sum_{d=1}^D{d(y_d, f_d)^2}\\
+    \bar{\mathbf{y}} &= \frac{1}{D}\sum_{d=1}^{D}\mathbf{y}_d\\
+    SS_{tot.} &= \sum_{d=1}^D{d(\mathbf{y}_d, \bar{\mathbf{y}})^2}\\
+    SS_{resid.} &= \sum_{d=1}^D{d(\mathbf{y}_d, \mathbf{f}_d)^2}\\
     R^2 &\equiv 1 - \frac{SS_{resid.}}{SS_{tot.} }
 \end{align}
 
@@ -764,9 +770,10 @@ Variation}\label{pseudo-coefficients-of-variation}}
 
 Several pseudo coefficients of variation have been developed for models
 where the traditional \(R^2\) is inappropriate. Some of these, such as
-the Cox and Snell's \(R^2\) \cite{cox89} or McFadden's \(R^2\)
-\cite{mcfadden77} may apply to topic models. As pointed out by
-\emph{UCLA's Institute for Digital Research and Education},\cite{ucla}
+the Cox and Snell's \(R^2\) (Cox and Snell 1989) or McFadden's \(R^2\)
+(McFadden, Tye, and Train 1977) may apply to topic models. As pointed
+out in \emph{UCLA's Institute for Digital Research and Education},(Bruin
+2006)
 
 \begin{quote}
 These are `pseudo' R-squareds because they look like R-squared in the sense that they are on a similar scale, ranging from 0 to 1 (though some pseudo R-squareds never achieve 0 or 1) with higher values indicating better model fit, but they cannot be interpreted as one would interpret an OLS R-squared and different pseudo R-squareds can arrive at very different values. 
@@ -777,15 +784,20 @@ McFadden's \(R^2\) for topic models to compare to the standard
 (non-pseudo) \(R^2\). McFadden's \(R^2\) is defined as
 
 \begin{align}
-    R^2_{Mc} & \equiv 1 - \frac{ ln( L_{full} ) }{ ln( L_{restricted} ) }\\
+    R^2_{Mc} & \equiv 1 - \frac{ ln( L_{full} ) }{ ln( L_{restricted} ) }
 \end{align}
 
-where \$ L\_\{full\} \$ is the estimated likelihood of the data under
-the model and \$ L\_\{restricted\} \$ is the estimated likelihood of the
-data free of the model. In the context of OLS, the restricted model is a
+where \(L_{full}\) is the estimated likelihood of the data under the
+model and \(L_{restricted}\) is the estimated likelihood of the data
+free of the model. In the context of OLS, the restricted model is a
 regression with only an intercept term. For other types of model (such
 as topic models), care should be taken in selecting what ``free of the
 model'' means.
+
+For topic models, ``free of the model'' may mean that the words were
+drawn from a simple multinomial distribution, whose parameter is
+proportional to the relative frequencies of words in the corpus overall.
+This is the specification used for the emperical analysis in this paper.
 
 \hypertarget{empirical-evaluation-of-topic-model-r2}{%
 \section{\texorpdfstring{Empirical Evaluation of Topic Model
@@ -795,82 +807,90 @@ This paper performs three analyses to empirically evaluate \(R^2\) for
 topic models. Two analyses use Monte Carlo-simulated corpora and one
 uses a corpus of grants awarded through the Department of Health and
 Human Services. This latter corpus was obtained from the National
-Institutes of Health \emph{NIH ExPORTER} database. \cite{nih} The first
-analysis uses simulated corpora to observe how the properties of
-training corpora influence \(R^2\). The second analysis uses these same
-simulated corpora to compare \(R^2\) as commonly-defined to McFadden's
-\(R^2\) in the context of topic modeling. The final analysis compares
-the \(R^2\) values of various models constructed on the NIH corpus.
+Institutes of Health \emph{NIH ExPORTER} database. (``Welcome to
+Exporter,'' n.d.) The first analysis uses simulated corpora to observe
+how the properties of training corpora influence \(R^2\). The second
+analysis uses these same simulated corpora to compare \(R^2\) as
+commonly-defined to McFadden's \(R^2\) in the context of topic modeling.
+The final analysis compares the \(R^2\) values of various models
+constructed on the NIH corpus.
 
 \hypertarget{monte-carlo-simulated-corpora}{%
 \subsection{Monte Carlo-Simulated
 Corpora}\label{monte-carlo-simulated-corpora}}
 
 It is possible to simulate corpora that are statistically-consistent to
-human-generated language. St.~Thomas and Jones derive this method in a
-working paper recently submitted for peer review. \cite{stthomas15} This
-method generates a corpus of \(D\) documents, \(V\) tokens, and \(K\)
-topics through the following stochastic process.
+human-generated language using the functional form of a topic model. To
+do so, one must set \(\boldsymbol\beta\) such that its entries are
+proportional to a power law. The result is a corpus whose relative term
+frequencies follow Zipf's law of language.(Zipf 1949) The derivation of
+this result is included in the appendix.
 
-\begin{align}
-    \beta_{k, v} \sim Pareto(1, \gamma) && k \in \{1, \ldots, K\} \\
-    \phi_k \sim Dirichlet_V(\beta_k) && k \in \{1, \ldots, K\} \\
-    \theta_d \sim Dirichlet_K(\alpha) && d \in \{1, \ldots, D\} \\
-    N_d \sim Poisson(\lambda) &&  d \in \{1, \ldots, D\} \\
-    z_{d,n} \sim Categorical_K(\theta_d) && d \in \{1, \ldots, D\}, n \in \{1, \ldots, N_d \} \\
-    v_{k,n} \sim Categorical_V(\phi_k) && k \in \{1, \ldots, K\},  n \in \{1, \ldots, N_d \} \\
-\end{align}
+This method generates a corpus of \(D\) documents, \(V\) tokens, and
+\(K\) topics through the following stochastic process:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Initialize
+  \(\\ \boldsymbol\phi_k \sim Dirichlet_V(\boldsymbol\beta)\\\)
+  \(\boldsymbol\theta_d \sim Dirichlet_K(\boldsymbol\alpha)\)
+\item
+  Then for each document draw \(\\ n_d \sim Poisson(\lambda)\)
+\item
+  Finally, for each document draw the following \(n_d\) times
+  \(\\ z_{d,n} \sim Categorical_K(\boldsymbol\theta_d)\\\)
+  \(w_{d,n} \sim Categorical_V(\boldsymbol\phi_{z_{d,n}})\)
+\end{enumerate}
 
 The words for document \(d\) are populated by sampling with replacement
-from \(z_{d,n}\) and \(v_{k,n}\) for \(N_d\) iterations. The parameters
+from \(z_{d,n}\) and \(w_{dk,n}\) for \(n_d\) iterations. The parameters
 \(V\), \(K\), and \(\lambda\) may be varied to adjust the corpus
 properties for the number of tokens, topics, and average document length
-respectively. \(\beta_k\) is drawn from a Pareto distribution to
-generate corpora consistent with Zipf's law. The parameter of the Pareto
-distribution, \(\gamma\), may be estimated from an existing corpus;
-St.~Thomas and Jones set \(\gamma = 1.1\). The index, \(v\), of each
-token is permuted for each \(\beta_k\) to ensure heterogeneity of the
-simulated topics.
+respectively. Adjusting the shape and magnitude of \(\boldsymbol\alpha\)
+and \(\boldsymbol\beta\) affect the concentration of topics within
+documents and words within topics respectively.
 
 \hypertarget{latent-dirichlet-allocation}{%
 \subsection{Latent Dirichlet
 Allocation}\label{latent-dirichlet-allocation}}
 
 This paper uses Latent Dirichlet Allocation (LDA) and collapsed Gibbs
-sampling to estimate topic models from simulated or actual data. LDA,
-possibly the most popular topic model, is a Bayesian hierarchical model
-that places Dirichlet priors on \(\theta_d, \forall d\) and
-\(\phi_k, \forall k\):
+sampling to estimate topic models from actual data. LDA---possibly the
+most popular topic model---is a Bayesian hierarchical model that places
+Dirichlet priors on \(\boldsymbol\theta_d, \forall d\) and
+\(\boldsymbol\phi_k, \forall k\). (Blei, Ng, and Jordan 2003)
 
-\begin{align*}
-\phi_k \sim& Dirichlet_V(\beta) && k\in\{1, \ldots, K\} \\
-{\theta}_d \sim& Dirichlet_K({\alpha}) && d\in\{1, \ldots, D\}\\
-\end{align*} A limitation with LDA is that the number of topics in the
-corpus must be specified a priori where no prior knowledge often exists.
-Compounding the problem, LDA's posteriors are inconsistent with respect
-to the number of topics. \cite{womack13} Nevertheless, LDA's empirical
-utility has been overwhelmingly demonstrated, having been used since
-2002. For LDA models estimated in this paper, symmetric parameters are
-used for both prior distributions. Each entry of \(\alpha\) is 0.1; each
-entry of \(\beta\) is 0.05.
+A limitation with LDA is that the number of topics in the corpus must be
+specified a priori where no prior knowledge often exists. Nevertheless,
+LDA's empirical utility has been overwhelmingly demonstrated. For LDA
+models fit in this paper, symmetric parameters are used for both prior
+distributions. Each entry of \(\boldsymbol\alpha\) is 0.1; each entry of
+\(\boldsymbol\beta\) is 0.05. Models are trained using Gibbs sampling
+from the \emph{textmineR} package for the R language.(Jones, n.d.)
 
-\subsection{Comparing $R^2$ to McFadden's $R^2$}
+\hypertarget{comparing-r2-to-mcfaddens-r2}{%
+\subsection{\texorpdfstring{Comparing \(R^2\) to McFadden's
+\(R^2\)}{Comparing R\^{}2 to McFadden's R\^{}2}}\label{comparing-r2-to-mcfaddens-r2}}
 
 McFadden's pseudo \(R^2\) is calculated for all simulated corpora for
 comparison to the standard \(R^2\). McFadden's \(R^2\) is a ratio of
 likelihoods. Various methods exist for calculating likelihoods of topic
-models. \cite{buntine09} Most of these methods have a Bayesian
-perspective and incorporate prior information. Not all topic models are
-Bayesian, however. And in the case of simulated corpora, the exact
-data-generating parameters are known a priori. As a result, likelihoods
-calculated for this paper follow the simplest definition: the
-probability of observing the generated data, given the (known or
-estimated) multinomial parameters of the model. The
-\texttt{model-free"\ likelihood\ assumes\ that\ each\ document\ is\ generated\ by\ drawing\ from\ a\ single\ multinomial\ distribution.\ The\ parameters\ of\ this}model-free"
-distribution are proportional to the frequency of each token in the
-data.
+models. (Buntine 2009) Most of these methods have a Bayesian perspective
+and incorporate prior information. Not all topic models are Bayesian,
+however. And in the case of simulated corpora, the exact data-generating
+parameters are known a priori. As a result, likelihoods calculated for
+this paper follow the simplest definition: the probability of observing
+the generated data, given the (known or estimated) multinomial
+parameters of the model. The ``model-free'' likelihood assumes that each
+document is generated by drawing from a single multinomial distribution.
+The parameters of this ``model-free'' distribution are proportional to
+the frequency of each token in the data.
 
-\subsection{Empirical Properties of $R^2$ for Topic Models}
+\hypertarget{empirical-properties-of-r2-for-topic-models}{%
+\subsection{\texorpdfstring{Empirical Properties of \(R^2\) for Topic
+Models}{Empirical Properties of R\^{}2 for Topic Models}}\label{empirical-properties-of-r2-for-topic-models}}
 
 The \(R^2\) for topic models has the following empirical properties: It
 is bound between \(-\infty\) and 1. \(R^2\) is invariant to the
@@ -930,7 +950,9 @@ been paid to document length, however. These results, if robust,
 indicate that focus should move away from larger corpora and towards
 lengthier documents.
 
-\subsection{Comparison of Simulated Data with the NIH Corpus}
+\hypertarget{comparison-of-simulated-data-with-the-nih-corpus}{%
+\subsection{Comparison of Simulated Data with the NIH
+Corpus}\label{comparison-of-simulated-data-with-the-nih-corpus}}
 
 \(R^2\) increases with the \textit{estimated} number of topics using
 LDA. This indicates a risk of model over fit with respect to the number
@@ -958,8 +980,6 @@ exactly. LDA's likelihood is contained within an intractable integral.
 Various approximations have been developed. However, there is some risk
 that a comparison of an approximated likelihood to \(R^2\) may be biased
 by the approximation method.
-
-{[}FIGURE HERE{]}
 
 Figure \textasciitilde{}\ref{fig:r2ll} depicts \(R^2\) and the log
 likelihood over a range of estimated \(K\) for both corpora. The left
@@ -1059,6 +1079,13 @@ as is typically done with OLS.
 \caption{Varying number of documents on a simulated corpus}
 \end{figure}
 
+\newpage
+
+\hypertarget{appendix}{%
+\section{Appendix}\label{appendix}}
+
+\newpage
+
 \hypertarget{acknowledgment}{%
 \section{Acknowledgment}\label{acknowledgment}}
 
@@ -1071,18 +1098,83 @@ The authors would like to thank\ldots{}
 \addcontentsline{toc}{section}{References}
 
 \hypertarget{refs}{}
+\leavevmode\hypertarget{ref-asuncion2009smoothing}{}%
+Asuncion, Arthur, Max Welling, Padhraic Smyth, and Yee Whye Teh. 2009.
+``On Smoothing and Inference for Topic Models.'' In \emph{Proceedings of
+the Twenty-Fifth Conference on Uncertainty in Artificial Intelligence},
+27--34. AUAI Press.
+
 \leavevmode\hypertarget{ref-blei2003latent}{}%
 Blei, David M, Andrew Y Ng, and Michael I Jordan. 2003. ``Latent
 Dirichlet Allocation.'' \emph{Journal of Machine Learning Research} 3
 (Jan): 993--1022.
 
+\leavevmode\hypertarget{ref-bruin2006faq}{}%
+Bruin, J. 2006. ``FAQ. What Are Pseudo-R-Squareds.'' UCLA: Academic
+Technology Services, Statistical Consulting Group. Retrieved~\ldots{}.
+
 \leavevmode\hypertarget{ref-buntine2009estimating}{}%
 Buntine, Wray. 2009. ``Estimating Likelihoods for Topic Models.'' In
 \emph{Asian Conference on Machine Learning}, 51--64. Springer.
 
+\leavevmode\hypertarget{ref-chang2009reading}{}%
+Chang, Jonathan, Sean Gerrish, Chong Wang, Jordan L Boyd-Graber, and
+David M Blei. 2009. ``Reading Tea Leaves: How Humans Interpret Topic
+Models.'' In \emph{Advances in Neural Information Processing Systems},
+288--96.
+
+\leavevmode\hypertarget{ref-cox1989analysis}{}%
+Cox, DR, and EJ Snell. 1989. \emph{Analysis of Binary Data}. Vol. 32.
+CRC Press.
+
 \leavevmode\hypertarget{ref-girolami2003equivalence}{}%
 Girolami, Mark, and Ata Kabán. 2003. ``On an Equivalence Between Plsi
 and Lda.'' In \emph{SIGIR}, 3:433--34.
+
+\leavevmode\hypertarget{ref-griffiths2004finding}{}%
+Griffiths, Thomas L, and Mark Steyvers. 2004. ``Finding Scientific
+Topics.'' \emph{Proceedings of the National Academy of Sciences} 101
+(suppl 1). National Acad Sciences: 5228--35.
+
+\leavevmode\hypertarget{ref-textminer}{}%
+Jones, Tommy. n.d. ``TextmineR.'' \url{https://www.rtextminer.com}.
+
+\leavevmode\hypertarget{ref-mcfadden1977application}{}%
+McFadden, Daniel, William B Tye, and Kenneth Train. 1977. \emph{An
+Application of Diagnostic Tests for the Independence from Irrelevant
+Alternatives Property of the Multinomial Logit Model}. Institute of
+Transportation Studies, University of California.
+
+\leavevmode\hypertarget{ref-mimno2011optimizing}{}%
+Mimno, David, Hanna M Wallach, Edmund Talley, Miriam Leenders, and
+Andrew McCallum. 2011. ``Optimizing Semantic Coherence in Topic
+Models.'' In \emph{Proceedings of the Conference on Empirical Methods in
+Natural Language Processing}, 262--72. Association for Computational
+Linguistics.
+
+\leavevmode\hypertarget{ref-neter1996applied}{}%
+Neter, John, Michael H Kutner, Christopher J Nachtsheim, and William
+Wasserman. 1996. \emph{Applied Linear Statistical Models}. Vol. 4. Irwin
+Chicago.
+
+\leavevmode\hypertarget{ref-nguyen2014sometimes}{}%
+Nguyen, Viet-An, Jordan Boyd-Graber, and Philip Resnik. 2014.
+``Sometimes Average Is Best: The Importance of Averaging for Prediction
+Using Mcmc Inference in Topic Modeling.'' In \emph{Proceedings of the
+2014 Conference on Empirical Methods in Natural Language Processing
+(Emnlp)}, 1752--7.
+
+\leavevmode\hypertarget{ref-wallach2009rethinking}{}%
+Wallach, Hanna M, David M Mimno, and Andrew McCallum. 2009. ``Rethinking
+Lda: Why Priors Matter.'' In \emph{Advances in Neural Information
+Processing Systems}, 1973--81.
+
+\leavevmode\hypertarget{ref-nih}{}%
+``Welcome to Exporter.'' n.d. \url{https://exporter.nih.gov/}.
+
+\leavevmode\hypertarget{ref-zipf1949human}{}%
+Zipf, George Kingsley. 1949. ``Human Behavior and the Principle of Least
+Effort.'' addison-wesley press.
 
 \end{document}
 
