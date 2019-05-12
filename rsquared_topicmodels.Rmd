@@ -430,7 +430,7 @@ The words for document $d$ are populated by sampling with replacement from $z_{d
 
 This paper uses Latent Dirichlet Allocation (LDA) and collapsed Gibbs sampling to estimate topic models from actual data. LDA---possibly the most popular topic model---is a Bayesian hierarchical model that places Dirichlet priors on $\boldsymbol\theta_d, \forall d$ and $\boldsymbol\phi_k, \forall k$. [@blei2003latent]
 
-A limitation with LDA is that the number of topics in the corpus must be specified a priori where no prior knowledge often exists. Nevertheless, LDA's empirical utility has been overwhelmingly demonstrated. For LDA models fit in this paper, symmetric parameters are used for both prior distributions. Each entry of $\boldsymbol\alpha$ is 0.1; each entry of $\boldsymbol\beta$ is 0.05. Models are trained using Gibbs sampling from the _textmineR_ package for the R language.[@textminer]
+A limitation with LDA is that the number of topics in the corpus must be specified a priori where no prior knowledge often exists. Nevertheless, LDA's empirical utility has been overwhelmingly demonstrated. For LDA models fit in this paper, symmetric parameters are used for both prior distributions. Each entry of $\boldsymbol\alpha$ is 0.1; each entry of $\boldsymbol\beta$ is 0.01. Models are trained using Gibbs sampling from the _textmineR_ package for the R language.[@textminer]
 
 ## Comparing $R^2$ to McFadden's $R^2$
 
