@@ -503,13 +503,14 @@ are equivalent models, however. (Girolami and Kabán 2003)
 Goodness of fit manifests itself in topic modeling through word
 frequencies. It is a common misconception that topic models are
 fully-unsupervised methods. If true, this would mean that no outcomes
-exist upon which to compare a model's fitted values. However, topic
-models are ultimately generative models of word frequencies. The
-expected value of a document under a topic model are given by the
-expected value of a multinomial random variable. The outcomes, then, are
-the word frequencies themselves. Most goodness of fit measures in topic
-modeling are restricted to in-sample fit. However, some out-of-sample
-measures have been developed. (Buntine 2009)
+exist upon which to compare a model's fitted values. However,
+probabilistic topic models are ultimately generative models of word
+frequencies.(Blei, Ng, and Jordan 2003) The expected value of a document
+under a topic model are given by the expected value of a multinomial
+random variable. The outcomes, then, are the word frequencies
+themselves. Most goodness of fit measures in topic modeling are
+restricted to in-sample fit. Yet some out-of-sample measures have been
+developed. (Buntine 2009)
 
 \hypertarget{probabilistic-topic-models}{%
 \section{Probabilistic Topic Models}\label{probabilistic-topic-models}}
@@ -518,19 +519,22 @@ Probabilistic topic models are a family of stochastic models for
 estimating abstract ``topics'' in a set of documents. Many methods have
 been developed to provide a flexible family of topic models. Some
 include frequently available metadata about documents, such as the time
-of the publication {[}CITE DYNAMIC TOPIC MODELS{]}, or the author and
-location of the publication {[}CITE{]}. Most probabilistic topic models
+of the publication (Blei and Lafferty 2006), or other metadata about the
+document or author(Roberts et al. 2014). Most probabilistic topic models
 are Bayesian, though probabilistic latent semantic analysis (pLSA) is
-frequentist. {[}CITE{]} Without loss of generality, all probabilistic
-topic models model the document-generating process as a mixture of
-multinomial distributions.\footnote{The terms ``multinomial'' and
-  ``categorical'' are often used interchangeably in the topic modeling
-  literature.} Probabilistic topic models estimate parameters of an
-idealized stochastic process for how words get on the page. Instead of
-writing full, syntatictically-coherent, sentences, the author samples a
-topic from a multinomial distribution and then given the topic samples a
-word. The process for a single draw of the \(n\)-th word for the
-\(d\)-th document, \(w_{d,n}\), is
+frequentist. Without loss of generality, all probabilistic topic models
+model the document-generating process as a mixture of multinomial
+distributions.\footnote{The terms ``multinomial'' and ``categorical''
+  are often used interchangeably in the topic modeling literature. A
+  multinomial distribution is the sum of categorical distributions---or
+  multiple trials. To avoid confusion, this paper uses multinomial and
+  specifies the number of trials, even if it's only one.} Probabilistic
+topic models estimate parameters of an idealized stochastic process for
+how words get on the page. Instead of writing full,
+syntatictically-coherent, sentences, the author samples a topic from a
+multinomial distribution and then given the topic samples a word. The
+process for a single draw of the \(n\)-th word for the \(d\)-th
+document, \(w_{d,n}\), is
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -550,13 +554,16 @@ The \(d\)-th row of \(\boldsymbol\Theta\) comprises
 \(\boldsymbol\theta_d\), above. And the \(k\)-th row of
 \(\boldsymbol\Phi\) comprises \(\boldsymbol\phi_k\).\footnote{LDA
   estimates these parameters by placing Dirichlet priors on \(\theta_d\)
-  and \(\phi_k\).} The document term matrix (DTM)---\(\mathbf{Y}\)---can
+  and \(\phi_k\).} The document term matrix (DTM)---\(\mathbf{W}\)---can
 be thought of as the result of repeated sampling from
 \(\boldsymbol\Theta\) and \(\boldsymbol\Phi\). In expectation we have
-the following relationship:
+the following relationship:\footnote{This relationship holds for
+  frequentist models. For Bayesian models, where there are priors on
+  \(\boldsymbol\Theta\) and \(\boldsymbol\Phi\), the law of total
+  expectation applies. This is the method used in the Appendix.}
 
 \begin{align}
-  E(\mathbf{Y}) &= \mathbf{n} \odot \Theta \cdot \Phi
+  \mathbb{E}(\mathbf{W}) &= \mathbf{n} \odot \Theta \cdot \Phi
 \end{align}
 
 Above, \(\mathbf{n}\) is a \(D\)-length vector whose \(d\)-th entry is
@@ -567,47 +574,63 @@ elementwise multiplication.
 \section{Evaluation Metrics for Topic
 Models}\label{evaluation-metrics-for-topic-models}}
 
-The primary goodness of fit measures in topic modeling are likelihood
-methods. Likelihoods, generally the log likelihood, are naturally
-obtained from probabilistic topic models. Likelihoods may contain prior
-information, as is often the case with Bayesian models. If prior
-information is unknown or undesired, researchers may calculate the
-likelihood using only estimated parameters. Researchers have used
-likelihoods to select the number of topics(Griffiths and Steyvers 2004),
-compare priors(Wallach, Mimno, and McCallum 2009), or otherwise evaluate
-the efficacy of different modeling procedures. (Asuncion et al. 2009)
+Most research on topic model evaluation has focused on presenting
+ordered lists of words that meet human judgement about words that belong
+together. For each topic, words are ordered from the highest value of
+\(\boldsymbol\phi_k\) to the lowest. In Chang et al. (2009) the authors
+introduce the ``intruder test.'' Judges are shown a few high-probability
+words in a topic, with one low-probability word mixed in. Judges must
+find the low-probability word, the intruder. They then repeat the
+procedure with documents instead of words. A good topic model should
+allow judges to easily detect the intruders.
+
+Coherence metrics attempt to approximate the results of intruder tests
+in an automated fashion. Researchers have put forward several coherence
+measures, mostly these compare pairs of highly-ranked words within
+topics. Rosner et al. (2014) evaluate several of these. They have human
+evaluators rank topics by quality and then compare rankings based on
+various coherence measures to the ranking of the evaluators. They
+express skepticism that existant coherence measures are sufficient to
+assess topic quality. In an ACL paper, Lau, Newman, and Baldwin (2014)
+find that normalized pointwise mutual information (NPMI) is a choerence
+metric that closely resembles human judgement.
+
+Measuring goodness-of-fit in topic models is less explored. The primary
+goodness of fit measures in topic modeling are likelihood methods.
+Likelihoods, generally the log likelihood, are naturally obtained from
+probabilistic topic models. Likelihoods may contain prior information,
+as is often the case with Bayesian models. If prior information is
+unknown or undesired, researchers may calculate the likelihood using
+only estimated parameters. Researchers have used likelihoods to select
+the number of topics(Griffiths and Steyvers 2004), compare
+priors(Wallach, Mimno, and McCallum 2009), or otherwise evaluate the
+efficacy of different modeling procedures. (Asuncion et al. 2009)
 (Nguyen, Boyd-Graber, and Resnik 2014) A popular likelihood method for
 evaluating out-of-sample fit is called perplexity. Perplexity measures a
 transformation of the likelihood of the held-out words conditional on
-the trained model.
+the trained model. However, Chang et al. (2009), researchers have
+eschewed goodness of fit. This author believes this is a mistake
+which---in part---motivates this research paper.
 
-Non-likelihood measures are less-commonly used. Some of these methods
-bridge the gap between interpretation and goodness of fit. One such
-method is the intruder test.(Chang et al. 2009) The intruder test uses
-human judgment. Judges are shown a few high-probability words in a
-topic, with one low-probability word mixed in. Judges must find the
-low-probability word, the intruder. They then repeat the procedure with
-documents instead of words. A good topic model should allow judges to
-easily detect the intruders. Coherence is a measure attempting to
-approximate the results of intruder tests in an automated fashion.
-(Mimno et al. 2011) The coherence of a topic is a sum of log ratios of
-word co-occurance across documents. Researchers have used precision and
-recall methods such as the area under a ROC curve (AUC) on
-topically-tagged corpora.(Asuncion et al. 2009) The most prevalent topic
-in each document is taken as a document's topical classification.
+Researchers have used also used topic models as a classifier. These
+evaluations employ precision and recall or the area under a ROC curve
+(AUC) on topically-tagged corpora.(Asuncion et al. 2009) The most
+prevalent topic in each document is taken as a document's topical
+classification.
 
 Though useful, current evaluation metrics in topic modeling are
 difficult to interpret, are inappropriate for use in topic modeling, or
 are cannot be produced easily. Intruder tests are time consuming and
 costly, making intruder tests infeasible to conduct regularly. Coherence
-is not primarily a goodness of fit measure. AUC is nicely bound between
-0 and 1, with 0.5 representing ``as good as random guessing''. Yet
-precision and recall measures mis-represent topic models as binary
-classifiers. This misrepresentation ignores one fundamental motivation
-for using topic models: allowing documents to contain multiple topics.
-Precision and recall measures also require substantial subjective
-judgement. Researchers must examine the high-probability words in a
-topic and decide that it does or does not correspond to the corpus tags.
+is not primarily a goodness of fit measure. AUC and precision and recall
+are nicely bound between 0 and 1, with 0.5 representing ``as good as
+random guessing''. Yet AUC and precision and recall measures
+mis-represent topic models as binary classifiers. This misrepresentation
+ignores one fundamental motivation for using topic models: allowing
+documents to contain multiple topics. This approach also requires
+substantial subjective judgement. Researchers must examine the
+high-probability words in a topic and decide that it does or does not
+correspond to the corpus tags.
 
 Likelihoods have an intuitive definition: the probability of observing
 the training data if the model is true. Yet properties of the underlying
@@ -649,8 +672,7 @@ values of \(R^2\) are possible for non-linear models or models in
 \(\mathbb{R}_M\) where \(M > 1\). These negative values indicate that
 simply guessing the mean outcome is a better fit than the
 model.\footnote{In this author's experience, negative values indicate an
-  error in one's code, rather than simply due to an exceptionally poor
-  fitting model.}
+  error in one's code, rather than an exceptionally poor fitting model.}
 
 \hypertarget{the-standard-definition-of-r2}{%
 \subsection{\texorpdfstring{The Standard Definition of
@@ -715,15 +737,16 @@ entry of \(\bar{\mathbf{y}}\) is averaged across all \(N\) vectors. i.e
 
 Fig. 1 visualizes the geometric interpretation of \(R^2\) for outcomes
 in \(\mathbb{R}_2\). The left image represents \(SS_{tot.}\): the red
-dots are data points(\(y_i\)); the black dot is the mean (\(\bar{y}\));
-the line segments represent the euclidean distance from each \(y_i\) to
-\(\bar{y}\). \(SS_{tot.}\) is obtained by squaring the length of each
-line segment and then adding the squared segments together. The right
-image represents \(SS_{resid.}\): the blue dots are the fitted values
-under the model (\(f_i\)); the line segments represent the euclidean
-distance from each \(f_i\) to its corresponding \(y_i\). \(SS_{resid.}\)
-is obtained by squaring the length of each line segment and then adding
-the squared segments together.
+dots are data points(\(\mathbf{y}_i\)); the black dot is the mean
+(\(\bar{\mathbf{y}}\)); the line segments represent the euclidean
+distance from each \(\mathbf{y}_i\) to \(\bar{\mathbf{y}}\).
+\(SS_{tot.}\) is obtained by squaring the length of each line segment
+and then adding the squared segments together. The right image
+represents \(SS_{resid.}\): the blue dots are the fitted values under
+the model (\(\mathbf{f}_i\)); the line segments represent the euclidean
+distance from each \(\mathbf{f}_i\) to its corresponding
+\(\mathbf{y}_i\). \(SS_{resid.}\) is obtained by squaring the length of
+each line segment and then adding the squared segments together.
 
 \begin{figure}
 \centering
@@ -738,9 +761,10 @@ the model is a perfect fit for the data and \(R^2 = 1\). If
 \(SS_{resid.} = SS_{tot.}\), then \(R^2 = 0\) and the model is no better
 than just guessing \(\bar{y}\). When \(0 < SS_{resid} < SS_{tot}\), then
 the model is a better fit for the data than a naive guess of
-\(\bar{y}\). In a non-linear or multi-dimensional model, it is possible
-for \(SS_{resid.} > SS_{tot.}\). In this case, \(R^2\) is negative, and
-guessing \(\bar{y}\) is better than using the model.
+\(\bar{\mathbf{y}}\). In a non-linear or multi-dimensional model, it is
+possible for \(SS_{resid.} > SS_{tot.}\). In this case, \(R^2\) is
+negative, and guessing \(\bar{\mathbf{y}}\) is better than using the
+model.
 
 \hypertarget{extending-r2-to-topic-models}{%
 \subsection{\texorpdfstring{Extending \(R^2\) to Topic
@@ -750,9 +774,15 @@ An \(R^2\) for topic models follows from the geometric interpretation of
 \(R^2\). For a document, \(d\), the observed value, \(\mathbf{y}_d\), is
 a vector of integers counting the number of times each token appears in
 \(n_d\) draws. The document's fitted value under the model follows that
-\(y_d\) represents the outcome of a multinomial random variable. The
-fitted value is
-\(\mathbf{f}_d = \mathbf{n} \odot \boldsymbol\theta_d \cdot \boldsymbol\Phi^T\).
+\(\mathbf{y}_d = \mathbf{w}_d\) represents the outcome of a multinomial
+random variable. The fitted value is
+
+\begin{align}
+  \mathbf{f}_d = 
+    \mathbb{E}(\mathbf{w}_d) = 
+    n_d \odot \boldsymbol\theta_d \cdot \boldsymbol\Phi 
+\end{align}
+
 The center of the documents in the corpus, \(\bar{\mathbf{y}}\), is
 obtained by averaging the occurrence of each token across all documents.
 From this we obtain \(R^2\).
@@ -834,14 +864,14 @@ This method generates a corpus of \(D\) documents, \(V\) tokens, and
 \tightlist
 \item
   Initialize
-  \(\\ \boldsymbol\phi_k \sim Dirichlet_V(\boldsymbol\beta)\\\)
-  \(\boldsymbol\theta_d \sim Dirichlet_K(\boldsymbol\alpha)\)
+  \(\\ \boldsymbol\phi_k \sim \text{Dirichlet}(\boldsymbol\beta)\\\)
+  \(\boldsymbol\theta_d \sim \text{Dirichlet}(\boldsymbol\alpha)\)
 \item
-  Then for each document draw \(\\ n_d \sim Poisson(\lambda)\)
+  Then for each document draw \(\\ n_d \sim \text{Poisson}(\lambda)\)
 \item
   Finally, for each document draw the following \(n_d\) times
-  \(\\ z_{d,n} \sim Categorical_K(\boldsymbol\theta_d)\\\)
-  \(w_{d,n} \sim Categorical_V(\boldsymbol\phi_{z_{d,n}})\)
+  \(\\ z_{d,n} \sim \text{Multionomial}(1, \boldsymbol\theta_d)\\\)
+  \(w_{d,n} \sim \text{Multionomial}(1, \boldsymbol\phi_{z_{d,n}})\)
 \end{enumerate}
 
 The words for document \(d\) are populated by sampling with replacement
@@ -867,7 +897,7 @@ specified a priori where no prior knowledge often exists. Nevertheless,
 LDA's empirical utility has been overwhelmingly demonstrated. For LDA
 models fit in this paper, symmetric parameters are used for both prior
 distributions. Each entry of \(\boldsymbol\alpha\) is 0.1; each entry of
-\(\boldsymbol\beta\) is 0.05. Models are trained using Gibbs sampling
+\(\boldsymbol\beta\) is 0.01. Models are trained using Gibbs sampling
 from the \emph{textmineR} package for the R language.(Jones, n.d.)
 
 \hypertarget{comparing-r2-to-mcfaddens-r2}{%
@@ -897,17 +927,40 @@ is bound between \(-\infty\) and 1. \(R^2\) is invariant to the
 \textit{true} number of topics in the corpus. \(R^2\) increases with the
 \textit{estimated} number of topics using LDA. This indicates a risk of
 model over fit in selecting too many topics (discussed in more detail in
-the next section). \(R^2\) decreases slightly as the vocabulary size of
-the corpus increases. There are \textit{large} increases in \(R^2\) as
-the average document length increases. Figures depicting these
-properties are in the Appendix.
+the next section). \(R^2\) decreases as the vocabulary size of the
+corpus increases. \(R^2\) increases as the average document length
+increases. (See Fig. 2, Fig. 3, Fig. 4, and Fig. 5.)
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/k_plot-1.pdf}
+\caption{Varying the number of topics on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/l_plot-1.pdf}
+\caption{Varying average document length on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/v_plot-1.pdf}
+\caption{Varying vocabulary size on a simulated corpus}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{rsquared_topicmodels_files/figure-latex/d_plot-1.pdf}
+\caption{Varying number of documents on a simulated corpus}
+\end{figure}
 
 Most of these empirical properties were obtained by using simulated
 corpora, as described earlier in the paper, with one exception. The
 default parameter settings for Monte Carlo simulation are \(K = 50\)
 topics, \(D = 2,000\) documents, \(V = 5,000\) tokens, and
 \(\lambda = 500\) for the average document length, which is distributed
-\(Poisson(\lambda)\). Each parameter was varied, holding other
+\(\text{Poisson}(\lambda)\). Each parameter was varied, holding other
 parameters constant. In each case, Monte Carlo simulation generates a
 document term matrix for the corpus while the parameters for generating
 the documents are known. \(R^2\) is calculated for each simulated
@@ -916,7 +969,7 @@ a best-case scenario, avoiding misspecification and other pathologies
 present with topic model estimation algorithms.
 
 McFadden's pseudo \(R^2\) is also calculated for these simulated data.
-McFadden's \(R^2\) is uniformly lower than the standard \(R^2\).
+McFadden's \(R^2\) is generally lower than the standard \(R^2\).
 McFadden's \(R^2\) is subject to the common problem of many pseudo
 \(R^2\) measures; its true upper bound is less than one. This makes
 sense. If McFadden's \(R^2\) were to equal 1, then the likelihood of the
@@ -926,11 +979,11 @@ likelihood will always be significantly less than 1. Therefore, a scale
 correction measure is needed, making McFadden's \(R^2\) more
 complicated.
 
-McFadden's \(R^2\) increases with the number of true topics; this is
-problematic. When the scale of an \(R^2\) varies with \textit{known}
-properties of the data, such as the number of documents, vocabulary
-size, average document length, etc. scale correction measures are
-possible. However, when the metric varies with an \textit{unknown}
+McFadden's \(R^2\) increases slightly with the number of true topics;
+this is problematic. When the scale of an \(R^2\) varies with
+\textit{known} properties of the data, such as the number of documents,
+vocabulary size, average document length, etc. scale correction measures
+are possible. However, when the metric varies with an \textit{unknown}
 property, such as the number of latent topics, then a scale correction
 is not possible. For this reason alone, McFadden's \(R^2\) is
 undesirable. Other properties of McFadden's \(R^2\) are consistent with
@@ -942,13 +995,15 @@ model fit whereas the number of documents is not. When choosing between
 fitting a topic model on short abstracts, full-page documents, or
 multi-page papers, it appears that more text is better. Second, since
 model fit is invariant for corpora over 1,000 documents (our lower bound
-for simulation), sampling from large corpora should yield reasonable
-estimates of population parameters. The topic modeling community has
-heretofore focused on scalability on large corpora of
-hundreds-of-thousands to millions of documents. Little attention has
-been paid to document length, however. These results, if robust,
-indicate that focus should move away from larger corpora and towards
-lengthier documents.
+for simulation), sampling from large corpora may yield reasonable
+estimates of population parameters.\footnote{Estimating appropriate
+  sample sizes and strategies based on properties of the text and
+  desired analyses is a fruitful area of future research.} The topic
+modeling community has heretofore focused on scalability on large
+corpora of hundreds-of-thousands to millions of documents. Little
+attention has been paid to document length, however. These results, if
+robust, indicate that focus should move away from larger corpora and
+towards lengthier documents.
 
 \hypertarget{comparison-of-simulated-data-with-the-nih-corpus}{%
 \subsection{Comparison of Simulated Data with the NIH
@@ -960,14 +1015,16 @@ of estimated topics. To evaluate the effect of \(R^2\) on the number of
 estimated topics, LDA models were fit to two corpora. The first corpus
 is simulated, using the parameter defaults: \(K = 50\), \(D = 2,000\),
 \(V = 5,000\), and \(\lambda = 500\). The second corpus is on the
-abstracts of 10,000 randomly-sampled research grants for fiscal year
-2014 in the National Institutes of Health's ExPORTER database. In both
-cases, LDA models are fit to the data estimating a range of \(K\). For
-each model, \(R^2\) and the log likelihood are calculated. The known
-parameters for this NIH corpus are \(D = 10,000\), \(V = 21,064\), and
-the median document length is 368 words. This vocabulary has standard
-stop words removed, includes bigrams as tokens, and excludes tokens that
-appear in fewer than 5 documents or more than half of the corpus.
+abstracts of 1,000 randomly-sampled research grants for fiscal year 2014
+in the National Institutes of Health's ExPORTER database. In both cases,
+LDA models are fit to the data estimating a range of \(K\). For each
+model, \(R^2\) and the log likelihood are calculated. The known
+parameters for this NIH corpus are \(D = 1,000\), \(V = 8,751\), and the
+median document length is 222 words. This vocabulary has standard stop
+words removed,\footnote{175 English stop words from the snowball stemmer
+  project. http://snowball.tartarus.org/algorithms/english/stop.txt} is
+tokenized to consider only unigrams, and excludes tokens that appear in
+fewer than 2 documents.
 
 The same likelihood calculation is used here, as described above. This
 likelihood calculation excludes prior information typically used when
@@ -977,42 +1034,46 @@ However, this prior information is excluded here for two reasons. First,
 it is consistent with the method used for calculating McFadden's \(R^2\)
 earlier in the paper. Second, this log likelihood can be calculated
 exactly. LDA's likelihood is contained within an intractable integral.
-Various approximations have been developed. However, there is some risk
-that a comparison of an approximated likelihood to \(R^2\) may be biased
-by the approximation method.
+Various approximations have been developed.(Buntine 2009) However, there
+is some risk that a comparison of an approximated likelihood to \(R^2\)
+may be biased by the approximation method.
 
+\begin{figure}
+\centering
 \includegraphics{rsquared_topicmodels_files/figure-latex/sim_figure-1.pdf}
+\caption{Comparison of R2 and log likelihood for LDA models fit on a
+simulated corpus}
+\end{figure}
 
+\begin{figure}
+\centering
 \includegraphics{rsquared_topicmodels_files/figure-latex/nih_figure-1.pdf}
+\caption{Comparison of R2 and log likelihood for LDA models fit on the
+NIH corpus}
+\end{figure}
 
-Figure \textasciitilde{}\ref{fig:r2ll} depicts \(R^2\) and the log
-likelihood over a range of estimated \(K\) for both corpora. The left
-image corresponds to the simulated corpus. The right image corresponds
-to the NIH corpus. From both images, we see that \(R^2\) and the log
-likelihood both increase with the number of estimated topics at
-approximately the same rates, proportional to their scales. The scale of
-\(R^2\) is comparable between the simulated corpus and the NIH corpus,
-in spite of their differences in size. The scale of log likelihoods
-between the corpora differ by orders of magnitude. In the case of the
-simulated corpus, we know that the true number of topics is 50. However,
-this is not clear from observing \(R^2\) or the log likelihood. \(R^2\)
-does appear to flatten between 55 and 60 topics for the simulated corpus
-while it continues to increase for the NIH corpus. Nevertheless, it does
-not appear that \(R^2\) or this ``raw" likelihood can help find the true
-number of
-topics.\footnote{Note, however, that the $R^2$ for the $K = 50$ (correctly-specified) LDA model is about 0.6. This is approximately the same value obtained for $R^2$ when using the population parameters.}
+Fig. 6 and Fig. 7 depict \(R^2\) and the log likelihood over a range of
+estimated \(K\) for both corpora. Fig. 6 corresponds to the simulated
+corpus. Fig. 7 corresponds to the NIH corpus. From both images, we see
+that \(R^2\) and the log likelihood both increase with the number of
+estimated topics. The scale of \(R^2\) is comparable between the
+simulated corpus and the NIH corpus, in spite of their differences in
+size. In the case of the simulated corpus, we know that the true number
+of topics is 50. However, this is not clear from observing \(R^2\) or
+the log likelihood. It does not appear that \(R^2\) or this ``raw''
+likelihood can help find the true number of topics.
 
-In \cite{chang09}, Chang et al.~observe that there may be a trade off
-between model fit and human interpretation. Specifically, they find that
-humans can more-easily interpret models with fewer topics. This may be
-true. As discussed in an earlier section, non-\(R^2\) goodness of fit
+In Chang et al. (2009), the authors observe that there may be a trade
+off between model fit and human interpretation. Specifically, they find
+that humans can more-easily interpret models with fewer topics. This may
+be true. As discussed in an earlier section, non-\(R^2\) goodness of fit
 measures are not readily comparable across corpora and models. Because
 \(R^2\) is comparable, it is now possible to quantify how much
 goodness-of-fit is lost when K is lowered. This does not address any
 issues arising from a pathological misspecification of the model, an
 ``incorrect'' K, for example. In the case of the NIH corpus, \(R^2\)
-goes from 0.5 to 0.4 when the number of estimated topics is lowered from
-200 to 100.
+goes from 0.27 to 0.2 when the number of estimated topics is lowered
+from 200 to 100.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -1059,41 +1120,152 @@ establishing consistency and rigour in topic modeling. This paper
 proposes reporting \(R^2\) as a standard metric alongside topic models,
 as is typically done with OLS.
 
-\begin{figure}
-\centering
-\includegraphics{rsquared_topicmodels_files/figure-latex/k_plot-1.pdf}
-\caption{Varying the number of topics on a simulated corpus}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics{rsquared_topicmodels_files/figure-latex/l_plot-1.pdf}
-\caption{Varying average document length on a simulated corpus}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics{rsquared_topicmodels_files/figure-latex/v_plot-1.pdf}
-\caption{Varying vocabulary size on a simulated corpus}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics{rsquared_topicmodels_files/figure-latex/d_plot-1.pdf}
-\caption{Varying number of documents on a simulated corpus}
-\end{figure}
-
 \newpage
 
 \hypertarget{appendix}{%
 \section{Appendix}\label{appendix}}
 
-\newpage
+Below derives the expected term frequency of a corpus whose terms are
+generated by the stochastic process modeled by Latent Dirichlet
+Allocation. This process is
 
-\hypertarget{acknowledgment}{%
-\section{Acknowledgment}\label{acknowledgment}}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Initialize
+  \(\\ \boldsymbol\phi_k \sim \text{Dirichlet}(\boldsymbol\beta)\\\)
+  \(\boldsymbol\theta_d \sim \text{Dirichlet}(\boldsymbol\alpha)\)
+\item
+  Then for each document draw \(\\ n_d \sim \text{Poisson}(\lambda)\)
+\item
+  Finally, for each document draw the following \(n_d\) times
+  \(\\ z_{d,n} \sim \text{Multionomial}(1, \boldsymbol\theta_d)\\\)
+  \(w_{d,n} \sim \text{Multionomial}(1, \boldsymbol\phi_{z_{d,n}})\)
+\end{enumerate}
 
-The authors would like to thank\ldots{}
+The expected term frequencies of a corpus generated with the above
+process are proportional to \(\boldsymbol\beta\)---the parameter for the
+Dirichlet prior for terms over topics. This implies that for a simulated
+corpus to follow Zipf's law, then \(\boldsymbol\beta\) must be
+proportional to a power law.\footnote{There may be other implications as
+  well. The author plans to explore these in future research.}
+
+Let's start by carrying the expected value through both sides of the
+equation in equation (11), above.
+
+\begin{align*}
+  \mathbb{E}(\mathbf{w}_d) 
+    &= \mathbb{E}\left(n_d \odot 
+      \boldsymbol\theta_d \cdot \boldsymbol\Phi\right)\\
+    &= \mathbb{E}\left(n_d
+      \begin{pmatrix}
+        \sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,1}\\
+        \sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,2}\\
+        ...\\
+        \sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,V}\\
+      \end{pmatrix}
+    \right)\\
+    &= \mathbb{E}(n_d)
+      \begin{pmatrix}
+        \mathbb{E}(\sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,1})\\
+        \mathbb{E}(\sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,2})\\
+        ...\\
+        \mathbb{E}(\sum_{k = 1}^K \theta_{d,k} \cdot \phi_{k,V})\\
+      \end{pmatrix}\\
+    &= \mathbb{E}(n_d)
+      \begin{pmatrix}
+        \sum_{k = 1}^K \mathbb{E}(\theta_{d,k}) \mathbb{E}(\phi_{k,1})\\
+        \sum_{k = 1}^K \mathbb{E}(\theta_{d,k})\mathbb{E}(\phi_{k,2})\\
+        ...\\
+        \sum_{k = 1}^K \mathbb{E}(\theta_{d,k}) \mathbb{E}(\phi_{k,V})\\
+      \end{pmatrix}
+\end{align*}
+
+The last step, above, is due to indpendence of \(\boldsymbol\theta_d\)
+and \(\boldsymbol\phi_k\) \(\forall d,k\).
+
+Before carrying on, let's note two more relationships:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(\boldsymbol\phi_k \sim \text{i.i.d. Dirichlet}(\boldsymbol\beta)\)
+  means that
+  \(\mathbb{E}(\boldsymbol\phi_i) = \mathbb{E}(\boldsymbol\phi_j)\)
+  \(\forall i,j \in \{1,2,..,K\}\)
+\item
+  The expected value of a Dirchlet random
+  variable---\(\mathbf{X}\)---with parameter \(\boldsymbol\delta\) is
+  \(\mathbb{E}(\mathbf{X}) = \frac{1}{\sum_{m=1}^M\delta_m}\cdot\boldsymbol\delta\)
+\end{enumerate}
+
+From number 1., above, we can pull \(\mathbb{E}(\phi_{.,k})\) outside of
+the summation. And we can carry through the expected values using
+definition in 2., above.
+
+\begin{align*}
+  \mathbb{E}(\mathbf{w}_d) 
+    &= \mathbb{E}(n_d)
+      \begin{pmatrix}
+        \mathbb{E}(\phi_{k,1}) \sum_{k = 1}^K \mathbb{E}(\theta_{d,k}) \\
+        \mathbb{E}(\phi_{k,2})\sum_{k = 1}^K \mathbb{E}(\theta_{d,k})\\
+        ...\\
+        \mathbb{E}(\phi_{k,V})\sum_{k = 1}^K \mathbb{E}(\theta_{d,k}) \\
+      \end{pmatrix}\\
+    &= n_d
+      \begin{pmatrix}
+        \frac{\beta_1}{\sum_{v=1}^V\beta_v} 
+          \sum_{k = 1}^K \frac{\alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+        \frac{\beta_2}{\sum_{v=1}^V\beta_v} 
+          \sum_{k = 1}^K \frac{\alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+        ...\\
+        \frac{\beta_V}{\sum_{v=1}^V\beta_v} 
+          \sum_{k = 1}^K \frac{\alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+      \end{pmatrix}\\
+    &= n_d
+      \begin{pmatrix}
+        \frac{\beta_1}{\sum_{v=1}^V\beta_v} 
+          \frac{\sum_{k = 1}^K \alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+        \frac{\beta_2}{\sum_{v=1}^V\beta_v} 
+          \frac{\sum_{k = 1}^K \alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+        ...\\
+        \frac{\beta_V}{\sum_{v=1}^V\beta_v} 
+          \frac{\sum_{k = 1}^K \alpha_k}{\sum_{k = 1}^K \alpha_k} \\
+      \end{pmatrix}\\
+    &= n_d
+      \begin{pmatrix}
+        \frac{\beta_1}{\sum_{v=1}^V\beta_v} \cdot 1 \\
+        \frac{\beta_2}{\sum_{v=1}^V\beta_v} \cdot 1  \\
+        ...\\
+        \frac{\beta_V}{\sum_{v=1}^V\beta_v} \cdot 1  \\
+      \end{pmatrix}\\
+   &= \frac{n_d}{\sum_{v=1}^V\beta_v}\boldsymbol\beta \\
+   &\propto \boldsymbol\beta
+\end{align*}
+
+The end result is that the expected term frequency of a single document
+is proportional to \(\boldsymbol\beta\)---the Dirichlet parameter for
+terms over topics.
+
+The term frequency for the whole corpus is the sum of the term
+frequencies for each document. Specifically
+
+\begin{align*}
+  \mathbf{w} = \sum_{d=1}^D\mathbf{w}_d
+\end{align*}
+
+The expected value under the model, then, can be carried through.
+
+\begin{align*}
+  \mathbb{E}(\mathbf{w})
+    &= \mathbb{E}\left(\sum_{d=1}^D\mathbf{w}_d\right) \\
+    &= \sum_{d=1}^D\mathbb{E}(\mathbf{w}_d)\\
+    &= \sum_{d=1}^D \frac{n_d}{\sum_{v=1}^V\beta_v}\boldsymbol\beta\\
+    &= \frac{\sum_{d=1}^D n_d}{\sum_{v=1}^V\beta_v}\boldsymbol\beta\\
+    &\propto \boldsymbol\beta
+\end{align*}
 
 \newpage
 
@@ -1107,6 +1279,11 @@ Asuncion, Arthur, Max Welling, Padhraic Smyth, and Yee Whye Teh. 2009.
 ``On Smoothing and Inference for Topic Models.'' In \emph{Proceedings of
 the Twenty-Fifth Conference on Uncertainty in Artificial Intelligence},
 27--34. AUAI Press.
+
+\leavevmode\hypertarget{ref-blei2006dynamic}{}%
+Blei, David M, and John D Lafferty. 2006. ``Dynamic Topic Models.'' In
+\emph{Proceedings of the 23rd International Conference on Machine
+Learning}, 113--20. ACM.
 
 \leavevmode\hypertarget{ref-blei2003latent}{}%
 Blei, David M, Andrew Y Ng, and Michael I Jordan. 2003. ``Latent
@@ -1143,18 +1320,17 @@ Topics.'' \emph{Proceedings of the National Academy of Sciences} 101
 \leavevmode\hypertarget{ref-textminer}{}%
 Jones, Tommy. n.d. ``TextmineR.'' \url{https://www.rtextminer.com}.
 
+\leavevmode\hypertarget{ref-lau2014machine}{}%
+Lau, Jey Han, David Newman, and Timothy Baldwin. 2014. ``Machine Reading
+Tea Leaves: Automatically Evaluating Topic Coherence and Topic Model
+Quality.'' In \emph{Proceedings of the 14th Conference of the European
+Chapter of the Association for Computational Linguistics}, 530--39.
+
 \leavevmode\hypertarget{ref-mcfadden1977application}{}%
 McFadden, Daniel, William B Tye, and Kenneth Train. 1977. \emph{An
 Application of Diagnostic Tests for the Independence from Irrelevant
 Alternatives Property of the Multinomial Logit Model}. Institute of
 Transportation Studies, University of California.
-
-\leavevmode\hypertarget{ref-mimno2011optimizing}{}%
-Mimno, David, Hanna M Wallach, Edmund Talley, Miriam Leenders, and
-Andrew McCallum. 2011. ``Optimizing Semantic Coherence in Topic
-Models.'' In \emph{Proceedings of the Conference on Empirical Methods in
-Natural Language Processing}, 262--72. Association for Computational
-Linguistics.
 
 \leavevmode\hypertarget{ref-neter1996applied}{}%
 Neter, John, Michael H Kutner, Christopher J Nachtsheim, and William
@@ -1167,6 +1343,18 @@ Nguyen, Viet-An, Jordan Boyd-Graber, and Philip Resnik. 2014.
 Using Mcmc Inference in Topic Modeling.'' In \emph{Proceedings of the
 2014 Conference on Empirical Methods in Natural Language Processing
 (Emnlp)}, 1752--7.
+
+\leavevmode\hypertarget{ref-roberts2014structural}{}%
+Roberts, Margaret E, Brandon M Stewart, Dustin Tingley, Christopher
+Lucas, Jetson Leder-Luis, Shana Kushner Gadarian, Bethany Albertson, and
+David G Rand. 2014. ``Structural Topic Models for Open-Ended Survey
+Responses.'' \emph{American Journal of Political Science} 58 (4). Wiley
+Online Library: 1064--82.
+
+\leavevmode\hypertarget{ref-rosner2014evaluating}{}%
+Rosner, Frank, Alexander Hinneburg, Michael Röder, Martin Nettling, and
+Andreas Both. 2014. ``Evaluating Topic Coherence Measures.'' \emph{arXiv
+Preprint arXiv:1403.6397}.
 
 \leavevmode\hypertarget{ref-wallach2009rethinking}{}%
 Wallach, Hanna M, David M Mimno, and Andrew McCallum. 2009. ``Rethinking
