@@ -8,21 +8,21 @@ affiliation:
   # wide: true                  ## one column wide author/affiliation fields
 
   institution:
-    - name: George Mason University
-      department: Department of Computational and Data Sciences
-      location: Fairfax, VA
-      email: jones.thos.w@gmail.com
+    - name: [redacted]
+      department: [redacted]
+      location: [redacted]
+      email: [redacted]
       mark: 1
       author:
-        - name: Tommy Jones
+        - name: [redacted]
 abstract: |
-  This document proposes a new (old) metric for evaluating
+  This research proposes a new (old) metric for evaluating
   goodness of fit in topic models, the coefficient of determination, or $R^2$.
   Within the context of topic modeling, $R^2$ has the same interpretation that
   it does when used in a broader class of statistical models. Reporting $R^2$
   with topic models addresses two current problems in topic modeling: a lack
   of standard cross-contextual evaluation metrics for topic modeling and ease
-  of communication with lay audiences. This paper proposes that $R^2$ should
+  of communication with lay audiences. The author proposes that $R^2$ should
   be reported as a standard metric when constructing topic models.
   
 header-includes:
@@ -30,6 +30,7 @@ header-includes:
    - \usepackage{amsbsy}
    - \usepackage{amsmath}
    - \usepackage{amsfonts}
+   - \bibliographystyle{IEEEtran}
 
 bibliography: mybibfile.bib
 output: rticles::ieee_article
@@ -639,7 +640,7 @@ The expected term frequencies of a corpus generated with the above process are p
 
 [^7]: There may be other implications as well. The author plans to explore these in future research.
 
-Let's start by carrying the expected value through both sides of the equation in equation (11), above.
+Let's start by carrying the expected value through both sides of equation (11), above, using the law of total expectation.
 
 \begin{align*}
   \mathbb{E}(\mathbf{w}_d) 
