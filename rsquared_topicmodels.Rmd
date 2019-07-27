@@ -425,7 +425,7 @@ This paper performs three analyses to empirically evaluate $R^2$ for topic model
 
 ## Monte Carlo-Simulated Corpora
 
-It is possible to simulate corpora that are statistically-consistent to human-generated language using the functional form of a topic model. To do so, one must set $\boldsymbol\beta$ such that its entries are proportional to a power law. The result is a corpus whose relative term frequencies follow Zipf's law of language [@zipf1949human]. The derivation of this result is included in the appendix.
+It is possible to simulate corpora that share some key statistical properties of  human-generated language using the functional form of a topic model. To do so, one must set $\boldsymbol\beta$ such that its entries are proportional to a power law. The result is a corpus whose relative term frequencies follow Zipf's law of language [@zipf1949human]. The derivation of this result is included in the appendix.
 
 This method generates a corpus of $D$ documents, $V$ tokens, and $K$ topics through the following stochastic process:
 
