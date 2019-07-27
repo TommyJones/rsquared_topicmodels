@@ -377,12 +377,12 @@
  %% -- beg if/affiliation.institution-columnar
 \IEEEauthorblockN{
   %% -- beg for/affiliation.institution.author
-redacted %% -- end for/affiliation.institution.author
+Tommy Jones %% -- end for/affiliation.institution.author
 }
-\IEEEauthorblockA{redacted\\
-redacted\\
-redacted
-\\redacted
+\IEEEauthorblockA{Computational and Data Sciences\\
+George Mason University\\
+Fairfax, VA
+\\jones.thos.w@gmail.com
 }
  %% -- end for/affiliation.institution
  %% -- end if/affiliation.institution-columnar
@@ -498,20 +498,20 @@ is cited as one motivation for using the Bayesian latent Dirichlet
 allocation (LDA) topic model over the frequentist probabilistic latent
 semantic analysis (pLSA). It is alleged that pLSA tends to over fit its
 training sample, making its estimates fragile to the introduction of new
-data. (Blei, Ng, and Jordan 2003) Under certain conditions, pLSA and LDA
-are equivalent models, however. (Girolami and Kabán 2003)
+data (Blei, Ng, and Jordan 2003). Under certain conditions, pLSA and LDA
+are equivalent models, however (Girolami and Kabán 2003).
 
 Goodness of fit manifests itself in topic modeling through word
 frequencies. It is a common misconception that topic models are
 fully-unsupervised methods. If true, this would mean that no outcomes
 exist upon which to compare a model's fitted values. However,
 probabilistic topic models are ultimately generative models of word
-frequencies.(Blei, Ng, and Jordan 2003) The expected value of a document
-under a topic model are given by the expected value of a multinomial
-random variable. The outcomes, then, are the word frequencies
-themselves. Most goodness of fit measures in topic modeling are
-restricted to in-sample fit. Yet some out-of-sample measures have been
-developed. (Buntine 2009)
+frequencies (Blei, Ng, and Jordan 2003). The expected value of a
+document under a topic model are given by the expected value of a
+multinomial random variable. The outcomes, then, are the word
+frequencies themselves. Most goodness of fit measures in topic modeling
+are restricted to in-sample fit. Yet some out-of-sample measures have
+been developed (Buntine 2009).
 
 \hypertarget{probabilistic-topic-models}{%
 \section{Probabilistic Topic Models}\label{probabilistic-topic-models}}
@@ -521,20 +521,20 @@ estimating abstract ``topics'' in a set of documents. Many methods have
 been developed to provide a flexible family of topic models. Some
 include frequently available metadata about documents, such as the time
 of the publication (Blei and Lafferty 2006), or other metadata about the
-document or author(Roberts et al. 2014). Most probabilistic topic models
-are Bayesian, though probabilistic latent semantic analysis (pLSA) is
-frequentist. Without loss of generality, all probabilistic topic models
-model the document-generating process as a mixture of multinomial
-distributions.\footnote{The terms ``multinomial'' and ``categorical''
-  are often used interchangeably in the topic modeling literature. A
-  multinomial distribution is the sum of categorical distributions---or
-  multiple trials. To avoid confusion, this paper uses multinomial and
-  specifies the number of trials, even if it's only one.} Probabilistic
-topic models estimate parameters of an idealized stochastic process for
-how words get on the page. Instead of writing full,
-syntatictically-coherent, sentences, the author samples a topic from a
-multinomial distribution and then given the topic samples a word. The
-process for a single draw of the \(n\)-th word for the \(d\)-th
+document or author (Roberts et al. 2014). Most probabilistic topic
+models are Bayesian, though probabilistic latent semantic analysis
+(pLSA) is frequentist. Without loss of generality, all probabilistic
+topic models model the document-generating process as a mixture of
+multinomial distributions.\footnote{The terms ``multinomial'' and
+  ``categorical'' are often used interchangeably in the topic modeling
+  literature. A multinomial distribution is the sum of categorical
+  distributions---or multiple trials. To avoid confusion, this paper
+  uses multinomial and specifies the number of trials, even if it's only
+  one.} Probabilistic topic models estimate parameters of an idealized
+stochastic process for how words get on the page. Instead of writing
+full, syntatictically-coherent, sentences, the author samples a topic
+from a multinomial distribution and then given the topic samples a word.
+The process for a single draw of the \(n\)-th word for the \(d\)-th
 document, \(w_{d,n}\), is
 
 \begin{enumerate}
@@ -591,7 +591,7 @@ measures, mostly these compare pairs of highly-ranked words within
 topics. Rosner et al. (2014) evaluate several of these. They have human
 evaluators rank topics by quality and then compare rankings based on
 various coherence measures to the ranking of the evaluators. They
-express skepticism that existant coherence measures are sufficient to
+express skepticism that existing coherence measures are sufficient to
 assess topic quality. In an ACL paper, Lau, Newman, and Baldwin (2014)
 find that normalized pointwise mutual information (NPMI) is a choerence
 metric that closely resembles human judgement.
@@ -603,11 +603,11 @@ probabilistic topic models. Likelihoods may contain prior information,
 as is often the case with Bayesian models. If prior information is
 unknown or undesired, researchers may calculate the likelihood using
 only estimated parameters. Researchers have used likelihoods to select
-the number of topics(Griffiths and Steyvers 2004), compare
-priors(Wallach, Mimno, and McCallum 2009), or otherwise evaluate the
-efficacy of different modeling procedures. (Asuncion et al. 2009)
-(Nguyen, Boyd-Graber, and Resnik 2014) A popular likelihood method for
-evaluating out-of-sample fit is called perplexity. Perplexity measures a
+the number of topics (Griffiths and Steyvers 2004), compare priors
+(Wallach, Mimno, and McCallum 2009), or otherwise evaluate the efficacy
+of different modeling procedures. (Asuncion et al. 2009) (Nguyen,
+Boyd-Graber, and Resnik 2014) A popular likelihood method for evaluating
+out-of-sample fit is called perplexity. Perplexity measures a
 transformation of the likelihood of the held-out words conditional on
 the trained model. However, Chang et al. (2009), researchers have
 eschewed goodness of fit. This author believes this is a mistake
@@ -615,7 +615,7 @@ which---in part---motivates this research paper.
 
 Researchers have used also used topic models as a classifier. These
 evaluations employ precision and recall or the area under a ROC curve
-(AUC) on topically-tagged corpora.(Asuncion et al. 2009) The most
+(AUC) on topically-tagged corpora (Asuncion et al. 2009). The most
 prevalent topic in each document is taken as a document's topical
 classification.
 
@@ -666,7 +666,7 @@ interpreted---without loss of generality---as the proportion of
 \emph{variability} in the data that is explained by the model. For
 linear models with outcomes in \(\mathbb{R}_1\), \(R^2\) is bound
 between 0 and 1 and is the proportion of \emph{variance} in the data
-explained by the model.(Neter et al. 1996) Even outside of the context
+explained by the model (Neter et al. 1996). Even outside of the context
 of a linear model, \(R^2\) retains its maximum of 1 and its
 interpretation as the proportion of explained variability. Negative
 values of \(R^2\) are possible for non-linear models or models in
@@ -738,7 +738,7 @@ entry of \(\bar{\mathbf{y}}\) is averaged across all \(N\) vectors. i.e
 
 Fig. 1 visualizes the geometric interpretation of \(R^2\) for outcomes
 in \(\mathbb{R}_2\). The left image represents \(SS_{tot.}\): the red
-dots are data points(\(\mathbf{y}_i\)); the black dot is the mean
+dots are data points (\(\mathbf{y}_i\)); the black dot is the mean
 (\(\bar{\mathbf{y}}\)); the line segments represent the euclidean
 distance from each \(\mathbf{y}_i\) to \(\bar{\mathbf{y}}\).
 \(SS_{tot.}\) is obtained by squaring the length of each line segment
@@ -803,8 +803,8 @@ Several pseudo coefficients of variation have been developed for models
 where the traditional \(R^2\) is inappropriate. Some of these, such as
 the Cox and Snell's \(R^2\) (Cox and Snell 1989) or McFadden's \(R^2\)
 (McFadden, Tye, and Train 1977) may apply to topic models. As pointed
-out in \emph{UCLA's Institute for Digital Research and Education},(Bruin
-2006)
+out in \emph{UCLA's Institute for Digital Research and Education},
+(Bruin 2006)
 
 \begin{quote}
 These are `pseudo' R-squareds because they look like R-squared in the sense that they are on a similar scale, ranging from 0 to 1 (though some pseudo R-squareds never achieve 0 or 1) with higher values indicating better model fit, but they cannot be interpreted as one would interpret an OLS R-squared and different pseudo R-squareds can arrive at very different values. 
@@ -854,7 +854,7 @@ It is possible to simulate corpora that are statistically-consistent to
 human-generated language using the functional form of a topic model. To
 do so, one must set \(\boldsymbol\beta\) such that its entries are
 proportional to a power law. The result is a corpus whose relative term
-frequencies follow Zipf's law of language.(Zipf 1949) The derivation of
+frequencies follow Zipf's law of language (Zipf 1949). The derivation of
 this result is included in the appendix.
 
 This method generates a corpus of \(D\) documents, \(V\) tokens, and
@@ -871,8 +871,8 @@ This method generates a corpus of \(D\) documents, \(V\) tokens, and
   Then for each document draw \(\\ n_d \sim \text{Poisson}(\lambda)\)
 \item
   Finally, for each document draw the following \(n_d\) times
-  \(\\ z_{d,n} \sim \text{Multionomial}(1, \boldsymbol\theta_d)\\\)
-  \(w_{d,n} \sim \text{Multionomial}(1, \boldsymbol\phi_{z_{d,n}})\)
+  \(\\ z_{d,n} \sim \text{Multinomial}(1, \boldsymbol\theta_d)\\\)
+  \(w_{d,n} \sim \text{Multinomial}(1, \boldsymbol\phi_{z_{d,n}})\)
 \end{enumerate}
 
 The words for document \(d\) are populated by sampling with replacement
@@ -891,7 +891,7 @@ This paper uses Latent Dirichlet Allocation (LDA) and collapsed Gibbs
 sampling to estimate topic models from actual data. LDA---possibly the
 most popular topic model---is a Bayesian hierarchical model that places
 Dirichlet priors on \(\boldsymbol\theta_d, \forall d\) and
-\(\boldsymbol\phi_k, \forall k\). (Blei, Ng, and Jordan 2003)
+\(\boldsymbol\phi_k, \forall k\) (Blei, Ng, and Jordan 2003).
 
 A limitation with LDA is that the number of topics in the corpus must be
 specified a priori where no prior knowledge often exists. Nevertheless,
@@ -899,7 +899,7 @@ LDA's empirical utility has been overwhelmingly demonstrated. For LDA
 models fit in this paper, symmetric parameters are used for both prior
 distributions. Each entry of \(\boldsymbol\alpha\) is 0.1; each entry of
 \(\boldsymbol\beta\) is 0.01. Models are trained using Gibbs sampling
-from the \emph{textmineR} package for the R language.(Jones, n.d.)
+from the \emph{textmineR} package for the R language (Jones, n.d.).
 
 \hypertarget{comparing-r2-to-mcfaddens-r2}{%
 \subsection{\texorpdfstring{Comparing \(R^2\) to McFadden's
@@ -908,7 +908,7 @@ from the \emph{textmineR} package for the R language.(Jones, n.d.)
 McFadden's pseudo \(R^2\) is calculated for all simulated corpora for
 comparison to the standard \(R^2\). McFadden's \(R^2\) is a ratio of
 likelihoods. Various methods exist for calculating likelihoods of topic
-models. (Buntine 2009) Most of these methods have a Bayesian perspective
+models (Buntine 2009). Most of these methods have a Bayesian perspective
 and incorporate prior information. Not all topic models are Bayesian,
 however. And in the case of simulated corpora, the exact data-generating
 parameters are known a priori. As a result, likelihoods calculated for
@@ -927,7 +927,7 @@ The \(R^2\) for topic models has the following empirical properties: It
 is bound between \(-\infty\) and 1. \(R^2\) is invariant to the
 \textit{true} number of topics in the corpus. \(R^2\) increases with the
 \textit{estimated} number of topics using LDA. This indicates a risk of
-model over fit in selecting too many topics (discussed in more detail in
+model overfit in selecting too many topics (discussed in more detail in
 the next section). \(R^2\) decreases as the vocabulary size of the
 corpus increases. \(R^2\) increases as the average document length
 increases. (See Fig. 2, Fig. 3, Fig. 4, and Fig. 5.)
@@ -959,7 +959,7 @@ increases. (See Fig. 2, Fig. 3, Fig. 4, and Fig. 5.)
 Most of these empirical properties were obtained by using simulated
 corpora, as described earlier in the paper, with one exception. The
 default parameter settings for Monte Carlo simulation are \(K = 50\)
-topics, \(D = 2,000\) documents, \(V = 5,000\) tokens, and
+topics, \(D = 2{,}000\) documents, \(V = 5{,}000\) tokens, and
 \(\lambda = 500\) for the average document length, which is distributed
 \(\text{Poisson}(\lambda)\). Each parameter was varied, holding other
 parameters constant. In each case, Monte Carlo simulation generates a
@@ -1011,21 +1011,22 @@ towards lengthier documents.
 Corpus}\label{comparison-of-simulated-data-with-the-nih-corpus}}
 
 \(R^2\) increases with the \textit{estimated} number of topics using
-LDA. This indicates a risk of model over fit with respect to the number
+LDA. This indicates a risk of model overfit with respect to the number
 of estimated topics. To evaluate the effect of \(R^2\) on the number of
 estimated topics, LDA models were fit to two corpora. The first corpus
-is simulated, using the parameter defaults: \(K = 50\), \(D = 2,000\),
-\(V = 5,000\), and \(\lambda = 500\). The second corpus is on the
+is simulated, using the parameter defaults: \(K = 50\), \(D = 2{,}000\),
+\(V = 5{,}000\), and \(\lambda = 500\). The second corpus is on the
 abstracts of 1,000 randomly-sampled research grants for fiscal year 2014
 in the National Institutes of Health's ExPORTER database. In both cases,
 LDA models are fit to the data estimating a range of \(K\). For each
 model, \(R^2\) and the log likelihood are calculated. The known
-parameters for this NIH corpus are \(D = 1,000\), \(V = 8,751\), and the
-median document length is 222 words. This vocabulary has standard stop
-words removed,\footnote{175 English stop words from the snowball stemmer
-  project. http://snowball.tartarus.org/algorithms/english/stop.txt} is
-tokenized to consider only unigrams, and excludes tokens that appear in
-fewer than 2 documents.
+parameters for this NIH corpus are \(D = 1{,}000\), \(V = 8,751\), and
+the median document length is 222 words. This vocabulary has standard
+stop words removed,\footnote{175 English stop words from the snowball
+  stemmer project.
+  http://snowball.tartarus.org/algorithms/english/stop.txt} is tokenized
+to consider only unigrams, and excludes tokens that appear in fewer than
+2 documents.
 
 The same likelihood calculation is used here, as described above. This
 likelihood calculation excludes prior information typically used when
@@ -1035,9 +1036,9 @@ However, this prior information is excluded here for two reasons. First,
 it is consistent with the method used for calculating McFadden's \(R^2\)
 earlier in the paper. Second, this log likelihood can be calculated
 exactly. LDA's likelihood is contained within an intractable integral.
-Various approximations have been developed.(Buntine 2009) However, there
-is some risk that a comparison of an approximated likelihood to \(R^2\)
-may be biased by the approximation method.
+Various approximations have been developed (Buntine 2009). However,
+there is some risk that a comparison of an approximated likelihood to
+\(R^2\) may be biased by the approximation method.
 
 \begin{figure}
 \centering
@@ -1112,7 +1113,7 @@ away from scaling estimation algorithms for large corpora. Instead, more
 effort should be put towards obtaining high-quality data. Also, studying
 the relationship between these parameters, along with the number of
 topics, may facilitate the development of an adjusted \(R^2\), guarding
-against model over fit.
+against model overfit.
 
 Lack of consistent evaluation metrics has limited the use of topic
 models as a mature statistical method. The development of an \(R^2\) for
@@ -1141,8 +1142,8 @@ Allocation. This process is
   Then for each document draw \(\\ n_d \sim \text{Poisson}(\lambda)\)
 \item
   Finally, for each document draw the following \(n_d\) times
-  \(\\ z_{d,n} \sim \text{Multionomial}(1, \boldsymbol\theta_d)\\\)
-  \(w_{d,n} \sim \text{Multionomial}(1, \boldsymbol\phi_{z_{d,n}})\)
+  \(\\ z_{d,n} \sim \text{Multinomial}(1, \boldsymbol\theta_d)\\\)
+  \(w_{d,n} \sim \text{Multinomial}(1, \boldsymbol\phi_{z_{d,n}})\)
 \end{enumerate}
 
 The expected term frequencies of a corpus generated with the above
@@ -1342,8 +1343,8 @@ Chicago.
 Nguyen, Viet-An, Jordan Boyd-Graber, and Philip Resnik. 2014.
 ``Sometimes Average Is Best: The Importance of Averaging for Prediction
 Using Mcmc Inference in Topic Modeling.'' In \emph{Proceedings of the
-2014 Conference on Empirical Methods in Natural Language Processing
-(Emnlp)}, 1752--7.
+2014 Conference on Empirical Methods in Natural Language Processing},
+1752--7.
 
 \leavevmode\hypertarget{ref-roberts2014structural}{}%
 Roberts, Margaret E, Brandon M Stewart, Dustin Tingley, Christopher
@@ -1367,7 +1368,7 @@ Processing Systems}, 1973--81.
 
 \leavevmode\hypertarget{ref-zipf1949human}{}%
 Zipf, George Kingsley. 1949. ``Human Behavior and the Principle of Least
-Effort.'' addison-wesley press.
+Effort.'' Addison-Wesley Press.
 
 \end{document}
 
