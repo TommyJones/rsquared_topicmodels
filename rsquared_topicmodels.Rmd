@@ -8,13 +8,13 @@ affiliation:
   # wide: true                  ## one column wide author/affiliation fields
 
   institution:
-    - name: [redacted]
-      department: [redacted]
-      location: [redacted]
-      email: [redacted]
+    - name: George Mason University
+      department: Computational and Data Sciences
+      location: Fairfax, VA
+      email: jones.thos.w@gmail.com
       mark: 1
       author:
-        - name: [redacted]
+        - name: Tommy Jones
 abstract: |
   This research proposes a new (old) metric for evaluating
   goodness of fit in topic models, the coefficient of determination, or $R^2$.
